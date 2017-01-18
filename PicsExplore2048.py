@@ -14,6 +14,7 @@ info = db["bs64_info"]
 reds = redis.Redis(host='localhost', port=6379)
 all_count = info.count()
 reds.set('num', random.randint(1, all_count))
+is_load = False
 
 
 @app.route('/')
@@ -23,6 +24,9 @@ def hello_world():
 
 @app.route('/explore')
 def explore_pic():
+    pic_path = os.path.join(app.root_path + '/static/cache/image/')
+    for root, dirs, files in os.walk(pic_path):
+        reds.set(files, files)
     return render_template('pics.html', pic_url='../static/image/225_133828_b3e21.jpg')
 
 
@@ -32,10 +36,11 @@ def explore_pic_next():
     reds.set('num', int(reds.get('num')) + 1)
     for i in info.find().limit(1).skip(int(reds.get('num'))):
         title = i['title']
+        if reds.get(title) is None:
+            with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
+                t.write(base64.b64decode(i['bs64']))
+                t.flush()
         reds.set(title, title)
-        with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
-            t.write(base64.b64decode(i['bs64']))
-            t.flush()
         return json.dumps('../static/cache/image/' + title)[1:-1]
 
 
@@ -45,9 +50,11 @@ def explore_pic_pre():
     reds.set('num', int(reds.get('num')) - 1)
     for i in info.find().limit(1).skip(int(reds.get('num'))):
         title = i['title']
-        with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
-            t.write(base64.b64decode(i['bs64']))
-            t.flush()
+        if reds.get(title) is None:  # 避免重复下载
+            with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
+                t.write(base64.b64decode(i['bs64']))
+                t.flush()
+        reds.set(title, title)
         return json.dumps('../static/cache/image/' + title)[1:-1]
 
 
