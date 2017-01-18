@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>explore</title>
+</head>
+<script src="../static/js/jquery-2.1.4.min.js"></script>
+<script type="application/javascript">
+    function next() {
+        $.ajax({
+            url: '/explore/next',
+            type: 'POST',
+            success: function (response) {
+{#                alert(response);#}
+                $("#img").attr('src',response);
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+    function  pre() {
+        $.ajax({
+            url: '/explore/pre',
+            type: 'POST',
+            success: function (response) {
+{#                alert(response);#}
+                $("#img").attr('src',response);
+            }, error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
+<style>
+    body {
+        text-align: center;
+    }
+
+    button {
+        background-color: bisque;
+        border: 2px;
+        padding: 10px;
+    }
+</style>
+<body>
+<div id="content">
+    <div class="form-group">
+        <img id="img" style="width: 400px;height: 300px;align-content: center;padding: 6px"
+             src="{{ pic_url }}">
+    </div>
+    <div class="form-group">
+        <button id="pre" onclick="pre()">上一张</button>
+        <button id="next" onclick="next()">下一张</button>
+    </div>
+</div>
+</body>
+</html>
