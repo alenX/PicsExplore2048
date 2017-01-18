@@ -11,7 +11,9 @@
             url: '/explore/next',
             type: 'POST',
             success: function (response) {
-                $("#img").attr('src', response);
+                $("#img").attr('src', response.title);
+                {#                $("#img").css('width',response.width);#}
+                {#                $("#img").css('height',response.height);#}
             }, error: function (error) {
                 console.log(error);
             }
@@ -22,7 +24,9 @@
             url: '/explore/pre',
             type: 'POST',
             success: function (response) {
-                $("#img").attr('src', response);
+                $("#img").attr('src', response.title);
+                {#                $("#img").css('width',response.width);#}
+                {#                $("#img").css('height',response.height);#}
             }, error: function (error) {
                 console.log(error);
             }
@@ -73,13 +77,13 @@
     .gray {
         color: #515151;
         background: #d3d3d3;
-        background: linear-gradient(top,  #d3d3d3 0%,#8a8a8a 100%); /* W3C */
+        background: linear-gradient(top, #d3d3d3 0%, #8a8a8a 100%); /* W3C */
     }
 </style>
 <body>
 <div id="content">
     <div class="form-group">
-        <img id="img" style="width: 400px;height: 300px;align-content: center;padding: 6px"
+        <img id="img" style="width: 800px;height: 600px;align-content: center;padding: 6px"
              src="{{ pic_url }}">
     </div>
     <div class="form-group">

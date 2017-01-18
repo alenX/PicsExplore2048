@@ -5,7 +5,8 @@ import os
 import pymongo
 import random
 import redis
-from flask import Flask, render_template
+from PIL import Image
+from flask import Flask, render_template,jsonify
 
 app = Flask(__name__)
 client = pymongo.MongoClient("localhost", 27017)
@@ -35,16 +36,16 @@ def explore_pic():
 def explore_pic_next():
     print(reds.get('num'))
     reds.set('num', int(reds.get('num')) + 1)
-    pic_url = down_image()
-    return json.dumps('../static/cache/image/' + pic_url)[1:-1]
+    pics = down_image()
+    return jsonify(pics)
 
 
 @app.route('/explore/pre', methods=['POST'])
 def explore_pic_pre():
     print(reds.get('num'))
     reds.set('num', int(reds.get('num')) - 1)
-    pic_url = down_image()
-    return json.dumps('../static/cache/image/' + pic_url)[1:-1]
+    pics = down_image()
+    return jsonify(pics)
 
 
 def down_image():
@@ -55,7 +56,8 @@ def down_image():
                 t.write(base64.b64decode(i['bs64']))
                 t.flush()
             reds.set(str(title), str(title) + '')
-        return title
+        p = Image.open(os.path.join(app.root_path + '/static/cache/image/', title))
+        return {'title': '../static/cache/image/'+title, 'height': p.size[0], 'width': p.size[1]}
 
 
 if __name__ == '__main__':
