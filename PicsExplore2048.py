@@ -34,28 +34,25 @@ def explore_pic():
 def explore_pic_next():
     print(reds.get('num'))
     reds.set('num', int(reds.get('num')) + 1)
-    for i in info.find().limit(1).skip(int(reds.get('num'))):
-        title = i['title']
-        if reds.get(title) is None:
-            with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
-                t.write(base64.b64decode(i['bs64']))
-                t.flush()
-        reds.set(title, title)
-        return json.dumps('../static/cache/image/' + title)[1:-1]
+    return json.dumps('../static/cache/image/' + down_image())[1:-1]
 
 
 @app.route('/explore/pre', methods=['POST'])
 def explore_pic_pre():
     print(reds.get('num'))
     reds.set('num', int(reds.get('num')) - 1)
-    for i in info.find().limit(1).skip(int(reds.get('num'))):
+    return json.dumps('../static/cache/image/' + down_image())[1:-1]
+
+
+def down_image():
+    for i in info.find().limit(1).skip(int(int(reds.get('num')) % all_count) + 1):
         title = i['title']
         if reds.get(title) is None:  # 避免重复下载
             with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
                 t.write(base64.b64decode(i['bs64']))
                 t.flush()
         reds.set(title, title)
-        return json.dumps('../static/cache/image/' + title)[1:-1]
+        return title
 
 
 if __name__ == '__main__':
