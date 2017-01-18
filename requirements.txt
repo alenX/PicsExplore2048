@@ -1,0 +1,4 @@
+# This is an implicit value, here for clarity
+redis==2.10.5
+pymongo==3.3.0
+Flask==0.12
