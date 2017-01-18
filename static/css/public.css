@@ -7,7 +7,7 @@
     text-align: center;
 }
 
-.digg {
+.page {
     padding-right: 3px;
     padding-left: 3px;
     padding-bottom: 3px;
@@ -17,7 +17,7 @@
     margin-bottom:0
 }
 
-.digg A {
+.page A {
     border-right: #aaaadd 1px solid;
     padding-right: 5px;
     border-top: #aaaadd 1px solid;
@@ -31,7 +31,7 @@
     text-decoration: none
 }
 
-.digg A:hover {
+.page A:hover {
     border-right: #000099 1px solid;
     border-top: #000099 1px solid;
     border-left: #000099 1px solid;
@@ -39,7 +39,7 @@
     border-bottom: #000099 1px solid
 }
 
-DIV.digg A:active {
+.page A:active {
     border-right: #000099 1px solid;
     border-top: #000099 1px solid;
     border-left: #000099 1px solid;
@@ -47,7 +47,7 @@ DIV.digg A:active {
     border-bottom: #000099 1px solid
 }
 
-.digg SPAN.current {
+.page span.current {
     border-right: #000099 1px solid;
     padding-right: 5px;
     border-top: #000099 1px solid;
@@ -62,7 +62,7 @@ DIV.digg A:active {
     background-color: #000099
 }
 
-.digg SPAN.disabled {
+.page SPAN.disabled {
     border-right: #eee 1px solid;
     padding-right: 5px;
     border-top: #eee 1px solid;

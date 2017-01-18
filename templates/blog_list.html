@@ -5,20 +5,21 @@
 {% endblock %}
 {% block title %}首页{% endblock %}
 {% block body %}
+    {{ super() }}
     <div style="padding-bottom:0;position:relative"   >
     <div style="text-align: center">
         {% for blog in blogs %}
             <div class="title_line">
-                <h1>{{ blog.title }}</h1>
+                <a href="/blog/detail/{{ blog._id }}" style="text-decoration: none"><h1>{{ blog.title }}</h1></a>
             </div>
             <div>
                 <div class="content">
-                    <span href="#">{{ blog.content }}</span>
+                    <span>{{ blog.content }}</span>
                 </div>
             </div>
         {% endfor %}
     </div>
-    <div class="digg">
+    <div class="page">
         {% if current==1 %}
             <span class="disabled">&lt; </span>
         {% else %}
