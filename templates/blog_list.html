@@ -1,18 +1,41 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
 {% endblock %}
-{% block title %}列表{% endblock %}
+{% block title %}首页{% endblock %}
 {% block body %}
-<div style="text-align: center">
-    <div class="title_line">
-        <h1 href="#">测试名称</h1>
+    <div style="padding-bottom:0;position:relative"   >
+    <div style="text-align: center">
+        {% for blog in blogs %}
+            <div class="title_line">
+                <h1>{{ blog.title }}</h1>
+            </div>
+            <div>
+                <div class="content">
+                    <span href="#">{{ blog.content }}</span>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    <div>
-        <div class="content">
-            <span>测试内容</span>
-        </div>
+    <div class="digg">
+        {% if current==1 %}
+            <span class="disabled">&lt; </span>
+        {% else %}
+            <span><a href="/blog/list/{{ current-1 }}">&lt;</a> </span>
+        {% endif %}
+        {% for d in range(1,pages+1) %}
+            {% if current==d %}
+                <span class="current">{{ d }}</span>
+            {% else %}
+                <a href="/blog/list/{{ d }}">{{ d }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if current==pages %}
+            <span class="disabled">&gt; </span>
+        {% else %}
+            <span><a href="/blog/list/{{current+1}}">&gt;</a> </span>
+        {% endif %}
     </div>
-</div>
+    </div>
 {% endblock %}

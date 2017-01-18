@@ -5,12 +5,14 @@ import pymongo
 import random
 import redis
 from PIL import Image
-from flask import Flask, render_template,jsonify,url_for
+from flask import Flask, render_template, jsonify, url_for
 
 app = Flask(__name__)
 client = pymongo.MongoClient("localhost", 27017)
 db = client['find_2048']
+blogs = client['blogs']
 info = db["bs64_info"]
+blog = blogs['blog']
 reds = redis.Redis(host='localhost', port=6379, db=0)
 reds.flushdb()
 all_count = info.count()
@@ -56,12 +58,18 @@ def down_image():
                 t.flush()
             reds.set(str(title), str(title) + '')
         p = Image.open(os.path.join(app.root_path + '/static/cache/image/', title))
-        return {'title': '../static/cache/image/'+title, 'height': p.size[0], 'width': p.size[1]}
+        return {'title': '../static/cache/image/' + title, 'height': p.size[0], 'width': p.size[1]}
 
 
-@app.route('/blog/list')
-def blog_list():
-    return render_template('blog_list.html')
+@app.route('/blog/list/<int:current>')
+def blog_list(current):
+    all_num = blog.count()
+    if all_num % 2 == 0:
+        pages = all_num // 2
+    else:
+        pages = all_num // 2 + 1
+    all_blog = blog.find().limit(2).skip((current-1)*2)
+    return render_template('blog_list.html', blogs=all_blog, pages=pages, current=current)
 
 
 if __name__ == '__main__':
