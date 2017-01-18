@@ -1,0 +1,15 @@
+h1{
+    font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+    font-size: medium;
+    font-style: italic;
+    color: burlywood;
+}
+
+.title{
+    padding: 10px;
+}
+
+.content{
+    font-size: 20px;
+
+}

@@ -5,7 +5,7 @@ import pymongo
 import random
 import redis
 from PIL import Image
-from flask import Flask, render_template,jsonify
+from flask import Flask, render_template,jsonify,url_for
 
 app = Flask(__name__)
 client = pymongo.MongoClient("localhost", 27017)
@@ -57,6 +57,11 @@ def down_image():
             reds.set(str(title), str(title) + '')
         p = Image.open(os.path.join(app.root_path + '/static/cache/image/', title))
         return {'title': '../static/cache/image/'+title, 'height': p.size[0], 'width': p.size[1]}
+
+
+@app.route('/blog/list')
+def blog_list():
+    return render_template('blog_list.html')
 
 
 if __name__ == '__main__':

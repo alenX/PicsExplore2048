@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
+{% endblock %}
+{% block title %}列表{% endblock %}
+{% block body %}
+<div style="text-align: center">
+    <div class="title_line">
+        <h1 href="#">测试名称</h1>
+    </div>
+    <div>
+        <div class="content">
+            <span>测试内容</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
