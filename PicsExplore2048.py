@@ -24,6 +24,7 @@ reds.flushdb()
 all_count = info.count()
 reds.set('num', random.randint(1, all_count))
 is_load = False
+EVERY_NUM = 6
 
 
 @app.route('/')
@@ -68,13 +69,13 @@ def down_image():
 
 
 @app.route('/blog/list/<int:current>')
-def blog_list(current):
+def blog_list(current=1):
     all_num = blog.count()
-    if all_num % 2 == 0:
-        pages = all_num // 2
+    if all_num % EVERY_NUM == 0:
+        pages = all_num // EVERY_NUM
     else:
-        pages = all_num // 2 + 1
-    all_blog = blog.find().limit(2).skip((current - 1) * 2)
+        pages = all_num // EVERY_NUM + 1
+    all_blog = blog.find().limit(EVERY_NUM).skip((current - 1) * EVERY_NUM)
     return render_template('blog_list.html', blogs=all_blog, pages=pages, current=current)
 
 
