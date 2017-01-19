@@ -8,7 +8,7 @@
 <script type="application/javascript">
     function another_page(method) {
         $.ajax({
-            url: '/explore/'+method,
+            url: '/explore/' + method,
             type: 'POST',
             success: function (response) {
                 $("#img").attr('src', response.title);
@@ -64,6 +64,12 @@
         background: #d3d3d3;
         background: linear-gradient(top, #d3d3d3 0%, #8a8a8a 100%); /* W3C */
     }
+
+    .red {
+        color: #d3d3d3;
+        background: #c7254e;
+        background: linear-gradient(top, #d3d3d3 0%, #8a8a8a 100%); /* W3C */
+    }
 </style>
 <body>
 <div id="content">
@@ -73,7 +79,7 @@
     </div>
     <div class="form-group">
         <button id="pre" onclick="another_page('pre')" class="green">上一张</button>
-        <button id="next" onclick="another_page('next')" class="blue">下一张</button>
+        <button id="next" onclick="another_page('next')" class="red">下一张</button>
     </div>
 </div>
 </body>

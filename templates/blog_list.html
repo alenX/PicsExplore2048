@@ -6,8 +6,11 @@
 {% block title %}首页{% endblock %}
 {% block body %}
     {{ super() }}
-    <div style="padding-bottom:0;position:relative"   >
-    <div style="text-align: center">
+    <div class="head_pic">
+        <img class="pic" src="{{ url_for('static', filename='image/header.jpg') }}">
+    </div>
+    <div class="title_name">Blog</div>
+    <div style="text-align: center;padding-top: 100px">
         {% for blog in blogs %}
             <div class="title_line">
                 <a href="/blog/detail/{{ blog._id }}" style="text-decoration: none"><h1>{{ blog.title }}</h1></a>
@@ -19,24 +22,44 @@
             </div>
         {% endfor %}
     </div>
-    <div class="page">
-        {% if current==1 %}
-            <span class="disabled">&lt; </span>
-        {% else %}
-            <span><a href="/blog/list/{{ current-1 }}">&lt;</a> </span>
-        {% endif %}
-        {% for d in range(1,pages+1) %}
-            {% if current==d %}
-                <span class="current">{{ d }}</span>
+    <div class="footer">
+        <ul class="pagination">
+            {% if current==1 %}
+                <li><a class="disabled">«</a></li>
             {% else %}
-                <a href="/blog/list/{{ d }}">{{ d }}</a>
+                <li><a href="/blog/list/{{ current-1 }}">«</a></li>
             {% endif %}
-        {% endfor %}
-        {% if current==pages %}
-            <span class="disabled">&gt; </span>
-        {% else %}
-            <span><a href="/blog/list/{{current+1}}">&gt;</a> </span>
-        {% endif %}
-    </div>
+            {% for d in range(1,pages+1) %}
+                {% if current==d %}
+                    <li><a class="active">{{ d }}</a></li>
+                {% else %}
+                    <li><a href="/blog/list/{{ d }}">{{ d }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if current==pages %}
+                <li><a class="disabled">»</a></li>
+            {% else %}
+                <li><a href="/blog/list/{{ current+1}}">»</a></li>
+            {% endif %}
+        </ul>
+        {#<div class="page">
+            {% if current==1 %}
+                <button class="disabled">&lt; </button>
+            {% else %}
+                <button href="/blog/list/{{ current-1 }}">&lt; </button>
+            {% endif %}
+            {% for d in range(1,pages+1) %}
+                {% if current==d %}
+                    <button class="current_btn">{{ d }}</button>
+                {% else %}
+                    <button href="/blog/list/{{ d }}">{{ d }} </button>
+                {% endif %}
+            {% endfor %}
+            {% if current==pages %}
+                <button class="disabled">&gt; </button>
+            {% else %}
+                <button href="/blog/list/{{ current+1}}">&gt;  </button>
+            {% endif %}
+        </div>#}
     </div>
 {% endblock %}

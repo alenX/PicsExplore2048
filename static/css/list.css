@@ -1,15 +1,118 @@
-h1{
+h1 {
     font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
-    font-size: medium;
+    font-size: 25px;
     font-style: italic;
     color: burlywood;
 }
 
-.title{
+.title {
     padding: 10px;
+    font-size: 20px;
 }
 
-.content{
+.title_name {
+    font-size: 20px;
+    font-style: normal;
+    text-align: right;
+    width: 60%;
+}
+
+.content {
     font-size: 20px;
 
 }
+
+.pic {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.head_pic {
+    text-align: center;
+}
+
+.footer {
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    padding-left: 45%;
+    /*padding: 0 40% !*上 右 下 左*!*/
+}
+
+button {
+    display: inline-block;
+    position: relative;
+    margin: 5px;
+    padding: 0 5px;
+    text-align: center;
+    text-decoration: none;
+    font: bold 12px/25px Arial, sans-serif;
+    text-shadow: 1px 1px 1px rgba(255, 255, 255, .22);
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 10px;
+
+    -webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, .29), inset 1px 1px 1px rgba(255, 255, 255, .44);
+    -moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, .29), inset 1px 1px 1px rgba(255, 255, 255, .44);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, .29), inset 1px 1px 1px rgba(255, 255, 255, .44);
+
+    -webkit-transition: all 0.15s ease;
+    -moz-transition: all 0.15s ease;
+    -o-transition: all 0.15s ease;
+}
+
+
+.current_btn {
+    border: #8a8a8a 1px solid;
+    font-weight: bold;
+    color: #fff;
+    background-color: #985f0d
+}
+
+.page button.disabled {
+    border: #eee 1px solid;
+    padding: 2px;
+    margin: 2px;
+    color: #ddd;
+}
+/*分页*/
+div.footer {text-align: center;}
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+ul.pagination li a.disabled {
+    color: #ddd;
+}
+
+.pagination li:first-child a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+ul.pagination li a.active {
+    background-color: burlywood;
+    color: white;
+    border: 1px solid burlywood;
+}
+
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
