@@ -10,28 +10,10 @@ h1 {
     font-size: 20px;
 }
 
-.title_name {
-    font-size: 20px;
-    font-style: normal;
-    text-align: right;
-    width: 60%;
-}
-
 .content {
     font-size: 20px;
 
 }
-
-.pic {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-}
-
-.head_pic {
-    text-align: center;
-}
-
 .footer {
     position: absolute;
     bottom: 20px;

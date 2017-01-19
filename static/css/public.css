@@ -1,3 +1,20 @@
+.pic {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+}
+
+.head_pic {
+    text-align: center;
+}
+
+.title_name {
+    font-size: 20px;
+    font-style: normal;
+    text-align: right;
+    width: 60%;
+}
+
 .title_line {
     padding: 0 40px 0;
     margin: 20px 0;

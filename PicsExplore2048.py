@@ -68,8 +68,14 @@ def blog_list(current):
         pages = all_num // 2
     else:
         pages = all_num // 2 + 1
-    all_blog = blog.find().limit(2).skip((current-1)*2)
+    all_blog = blog.find().limit(2).skip((current - 1) * 2)
     return render_template('blog_list.html', blogs=all_blog, pages=pages, current=current)
+
+
+@app.route('/blog/detail/<string:id>')
+def blog_detail(id):
+    current_blog = blog.find({'id': id})
+    return render_template('blog_detail.html', current_blog=current_blog)
 
 
 if __name__ == '__main__':
