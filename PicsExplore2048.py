@@ -9,6 +9,8 @@ from flask import Flask, render_template, jsonify
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
+jinja_env = app.jinja_env
+
 client = pymongo.MongoClient("localhost", 27017)
 db = client['find_2048']
 blogs = client['blogs']
@@ -81,5 +83,10 @@ def blog_detail(blog_id):
     return render_template('blog_detail.html', current_blog=current_blog)
 
 
+def i_sub_str(i_str, s, e):
+    return i_str[s:e]
+
+
 if __name__ == '__main__':
+    jinja_env.filters['i_sub_str'] = i_sub_str
     app.run()

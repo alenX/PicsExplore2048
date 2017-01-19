@@ -14,7 +14,7 @@
             </div>
             <div>
                 <div class="content">
-                    <span>{{ blog.content }}</span>
+                    <span>{{ blog.content|i_sub_str(0,30)+'......' }}</span>
                 </div>
             </div>
         {% endfor %}

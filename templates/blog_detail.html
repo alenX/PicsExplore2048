@@ -6,6 +6,10 @@
 {% block title %}{{ current_blog.title }}{% endblock %}
 {% block body %}
     {{ super() }}
-
-
+    <div class="detail_title">
+    <h2>{{ current_blog.title }}</h2>
+    </div>
+    <div class="detail_content">
+        <span>{{ current_blog.content }}</span>
+    </div>
 {% endblock %}
