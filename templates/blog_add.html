@@ -11,13 +11,27 @@
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
     <script type="text/javascript" charset="utf-8"
             src="{{ url_for('static', filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
+
+    <script type="application/javascript">
+        function save_btn() {
+            $.ajax({
+                url: '/blog/add_content/',
+                data: JSON.stringify({'title': $('#title').val(), 'content': ue.getContent()}),
+                type: 'POST'
+            })
+        }
+
+    </script>
 {% endblock %}
 {% block title %}新增{% endblock %}
 {% block body %}
     {{ super() }}
     <div class="detail_title">
-        <span>题目</span><input type="text" title="content"/>
+        <span>题目</span><input type="text" title="主题" id="title"/>
     </div>
+    {#<div style="text-align: center;color: #2b542c;font-size: 20px;padding-top: 50px ;width: 80%;height: 80%">
+        <span style="text-align: left">内容</span>
+    </div>#}
     <div class="detail_content" style="width: 80%;height: 80%">
         <script id="editor" type="text/plain"></script>
         <script type="text/javascript">
@@ -28,7 +42,7 @@
             });
         </script>
     </div>
-    <div>
-    <button class="submit_btn">保存</button>
+    <div class="save">
+        <button class="save_btn" id="save_btn" onclick="save_btn()">保存</button>
     </div>
 {% endblock %}

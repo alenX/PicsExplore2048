@@ -5,8 +5,9 @@ import pymongo
 import random
 import redis
 import re
+import time, datetime
 from PIL import Image
-from flask import Flask, render_template, jsonify, request, json,make_response
+from flask import Flask, render_template, jsonify, request, json, make_response, url_for,redirect
 from bson.objectid import ObjectId
 from uploader import Uploader
 
@@ -88,6 +89,16 @@ def blog_detail(blog_id):
 @app.route('/blog/add')
 def blog_add():
     return render_template('blog_add.html')
+
+
+@app.route('/blog/add_content/', methods=['POST'])
+def add_content():
+    paras = request.get_data()
+    data = json.loads(paras)
+    data['datatime'] = datetime.datetime.now()
+    ids = blog.insert(data)
+    # return render_template('blog_add.html')
+    return redirect(url_for('blog_detail', blog_id=str(ids)))
 
 
 @app.errorhandler(404)
