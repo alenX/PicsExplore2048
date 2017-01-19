@@ -7,7 +7,7 @@ import redis
 import re
 import time, datetime
 from PIL import Image
-from flask import Flask, render_template, jsonify, request, json, make_response, url_for,redirect
+from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
 from bson.objectid import ObjectId
 from uploader import Uploader
 
@@ -28,7 +28,7 @@ is_load = False
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return redirect(url_for('explore_pic'))
 
 
 @app.route('/explore')
@@ -97,8 +97,7 @@ def add_content():
     data = json.loads(paras)
     data['datatime'] = datetime.datetime.now()
     ids = blog.insert(data)
-    # return render_template('blog_add.html')
-    return redirect(url_for('blog_detail', blog_id=str(ids)))
+    return jsonify({'id': str(ids)})
 
 
 @app.errorhandler(404)
