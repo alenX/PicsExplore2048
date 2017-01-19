@@ -12,7 +12,6 @@ from werkzeug.utils import secure_filename
 
 
 class Uploader:
-
     stateMap = [  # 上传状态映射表，国际化用户需考虑此处数据的国际化
         "SUCCESS",  # 上传成功标记，在UEditor中内不可改变，否则flash判断会出错
         "文件大小超出 upload_max_filesize 限制",
@@ -206,7 +205,7 @@ class Uploader:
         _format = _format.replace('{ss}', str(now.second))
         _format = _format.replace('{time}', _time)
 
-        # 过滤文件名的非法自负,并替换文件名
+        # 过滤文件名的非法字符,并替换文件名
         _format = _format.replace('{filename}',
                                   secure_filename(self.oriName))
 
@@ -216,7 +215,7 @@ class Uploader:
         _match = _pattern.search(_format)
         if _match is not None:
             n = int(_match.groups()[0])
-            _format = _pattern.sub(str(random.randrange(10**(n-1), 10**n)), _format)
+            _format = _pattern.sub(str(random.randrange(10 ** (n - 1), 10 ** n)), _format)
 
         _ext = self.getFileExt()
         return '%s%s' % (_format, _ext)
