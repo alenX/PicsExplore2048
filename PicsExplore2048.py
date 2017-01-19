@@ -5,7 +5,8 @@ import pymongo
 import random
 import redis
 from PIL import Image
-from flask import Flask, render_template, jsonify, url_for
+from flask import Flask, render_template, jsonify
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 client = pymongo.MongoClient("localhost", 27017)
@@ -72,9 +73,11 @@ def blog_list(current):
     return render_template('blog_list.html', blogs=all_blog, pages=pages, current=current)
 
 
-@app.route('/blog/detail/<string:id>')
-def blog_detail(id):
-    current_blog = blog.find({'id': id})
+@app.route('/blog/detail/<string:blog_id>')
+def blog_detail(blog_id):
+    current_blog = blog.find_one({'_id': ObjectId(blog_id)})
+    if current_blog is None:
+        return render_template('404.html'), 404
     return render_template('blog_detail.html', current_blog=current_blog)
 
 
