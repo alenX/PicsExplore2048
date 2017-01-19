@@ -6,10 +6,7 @@
 {% block title %}首页{% endblock %}
 {% block body %}
     {{ super() }}
-    <div class="head_pic">
-        <img class="pic" src="{{ url_for('static', filename='image/header.jpg') }}">
-    </div>
-    <div class="title_name">Blog</div>
+
     <div style="text-align: center;padding-top: 100px">
         {% for blog in blogs %}
             <div class="title_line">
