@@ -6,8 +6,8 @@ div.detail_title h2{
 }
 
 div.detail_content span{
-    padding: 10% 20% 10% 20%;
+    padding: 2% 20% 10% 20%;
     color: #8a8a8a;
     text-align: center;
-
+    display: block;
 }

@@ -77,10 +77,15 @@ def blog_list(current):
 
 @app.route('/blog/detail/<string:blog_id>')
 def blog_detail(blog_id):
-    current_blog = blog.find_one({'_id': ObjectId(blog_id)})
+    current_blog = blog.find_one({'_id': ObjectId(blog_id)}) #bson
     if current_blog is None:
         return render_template('404.html'), 404
     return render_template('blog_detail.html', current_blog=current_blog)
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 
 def i_sub_str(i_str, s, e):
