@@ -155,10 +155,7 @@ def blog_login():
 def blog_login_reg():
     paras = request.get_data()
     user_para = json.loads(paras)
-    print(user_para['user'])
-    print(user_para['password'])
-
-    user = User.query.filter_by(username=user_para['user'], password=user_para['password']).first()
+    user = User.query.filter_by(username=user_para['user'], password=base64.b64decode(user_para['password'])).first()
     if user:
         login_user(user)
         return jsonify({'rs': str('true')})
