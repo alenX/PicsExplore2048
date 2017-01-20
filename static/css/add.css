@@ -25,10 +25,15 @@ div.save {
 }
 
 div button.save_btn {
-    border-radius: 5px;
-    background-color: burlywood;
+    border-radius: 10px;
     font-size: 16px;
     height: 40px;
     width: 60px;
-    color: #D3D6DA;
+    color: green;
+}
+
+div.user_info{
+    text-align: right;
+    font-family: '微软雅黑', serif;
+    padding-right: 20%;
 }

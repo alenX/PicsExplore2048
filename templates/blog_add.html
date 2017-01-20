@@ -30,10 +30,10 @@
 {% block body %}
     {{ super() }}
     <div class="detail_title">
-        <span>题目</span><input type="text" title="主题" id="title"/>
+        <span style="padding-right: 30px">题目</span><input type="text" title="主题" id="title"/>
     </div>
     {% if current_user.is_authenticated %}
-        <div>Hi {{ current_user.username }}<a href="/blog/logout">注销</a></div>
+        <div class="user_info">Hi<a style="padding-right: 15px;color: #3b4249;font-size: 26px"> {{ current_user.username }}</a><a style="color:#1b6d85" href="/blog/logout">注销</a></div>
     {% endif %}
 
     {#<div style="text-align: center;color: #2b542c;font-size: 20px;padding-top: 50px ;width: 80%;height: 80%">
