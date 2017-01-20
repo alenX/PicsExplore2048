@@ -10,19 +10,21 @@ import datetime
 from PIL import Image
 from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
 from bson.objectid import ObjectId
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 
 from uploader import Uploader
 from models import User
 
-login_manager = LoginManager()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:1128@localhost:3306/blog?charset=utf8'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
 mysql_db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.session_protection = "strong"
+login_manager.login_view = "/blog/login"
 login_manager.init_app(app)
 jinja_env = app.jinja_env
 
@@ -100,6 +102,7 @@ def blog_detail(blog_id):
 
 
 @app.route('/blog/add')
+@login_required
 def blog_add():
     return render_template('blog_add.html')
 
@@ -120,7 +123,6 @@ def page_not_found(error):
 
 @app.route('/blog/login')
 def blog_login():
-    login = LoginManager()
     return render_template('login.html')
 
 
