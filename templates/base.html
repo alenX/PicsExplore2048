@@ -2,6 +2,7 @@
 <html lang="en">
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/public.css') }}">
+    <script src="{{ url_for('static',filename='js/jquery-2.1.4.min.js') }}"></script>
     {#    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">#}
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
@@ -13,5 +14,4 @@
     <div class="title_name">Blog</div>
     <div class="title_name"><a style="font-size: 15px">genhaoai@gmail.com</a></div>
 {% endblock %}
-<script src="{{ url_for('static',filename='js/jquery-2.1.4.min.js') }}"></script>
 </html>

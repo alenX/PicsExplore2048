@@ -2,11 +2,12 @@
 from flask_login import UserMixin
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
+from PicsExplore2048 import mysql_db as db
 
 Base = declarative_base()
 
 
-class User(Base, UserMixin):
+class User(UserMixin):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(64), unique=True, index=True)
@@ -16,9 +17,6 @@ class User(Base, UserMixin):
         self.name = name
         self.password = password
 
-    def __str__(self):
-        return self.name + self.password
-
     def is_authenticated(self):
         return True
 
@@ -27,3 +25,6 @@ class User(Base, UserMixin):
 
     def is_active(self):
         return True
+
+    def get_id(self):
+        return self.id

@@ -2,6 +2,27 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css') }}">
+    <script type="application/javascript">
+        $(document).ready(function () {
+            $('#login').click(function () {
+                var user = $('#usn').val();
+                var password = $('#pwd').val();
+                $.ajax({
+                    url: '/blog/login/reg',
+                    data: JSON.stringify({'user': user, 'password': password}),
+                    type: 'POST',
+                    success: function (resp) {
+                        if (resp.rs == 'true') {
+                            window.location.href = '/blog/add';
+                        } else {
+                            window.location.href = '/blog/login';
+                        }
+                    }
+                })
+            });
+        });
+
+    </script>
 {% endblock %}
 {% block title %}登陆{% endblock %}
 {% block body %}

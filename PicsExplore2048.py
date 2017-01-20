@@ -12,13 +12,13 @@ from flask import Flask, render_template, jsonify, request, json, make_response,
 from bson.objectid import ObjectId
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 from uploader import Uploader
-from models import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:1128@localhost:3306/blog?charset=utf8'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
 mysql_db = SQLAlchemy(app)
@@ -39,6 +39,31 @@ all_count = info.count()
 reds.set('num', random.randint(1, all_count))
 is_load = False
 EVERY_NUM = 6  # 每页数量
+
+
+class User(mysql_db.Model, UserMixin):
+    __tablename__ = 'users'
+    id = mysql_db.Column(mysql_db.Integer, primary_key=True)
+    username = mysql_db.Column(mysql_db.String(64), unique=True, index=True)
+    password = mysql_db.Column(mysql_db.String(64))
+
+    def __init__(self, id):
+        self.id = id
+
+    def is_authenticated(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return str(self.id)
+
+
+mysql_db.create_all()
 
 
 @app.route('/')
@@ -126,9 +151,24 @@ def blog_login():
     return render_template('login.html')
 
 
+@app.route('/blog/login/reg', methods=['POST'])
+def blog_login_reg():
+    paras = request.get_data()
+    user_para = json.loads(paras)
+    print(user_para['user'])
+    print(user_para['password'])
+
+    user = User.query.filter_by(username=user_para['user'], password=user_para['password']).first()
+    if user:
+        login_user(user)
+        return jsonify({'rs': str('true')})
+    else:
+        return jsonify({'rs': str('false')})
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    return User.query.get(int(user_id))
 
 
 @app.route('/upload/', methods=['GET', 'POST', 'OPTIONS'])
@@ -258,5 +298,4 @@ def i_sub_str(i_str, s, e):
 
 if __name__ == '__main__':
     jinja_env.filters['i_sub_str'] = i_sub_str
-    mysql_db.create_all()
     app.run()
