@@ -10,10 +10,23 @@ h1 {
     font-size: 20px;
 }
 
+div.title_time {
+    font-style: italic;
+    color: burlywood;
+    text-align: right;
+    padding-right: 20%;
+}
+
+div.title_time a.time {
+    text-align: right;
+}
+
 .content {
     font-size: 20px;
+    text-align: center;
 
 }
+
 .footer {
     padding-top: 60px;
     /*position: absolute;*/
@@ -46,7 +59,6 @@ button {
     -o-transition: all 0.15s ease;
 }
 
-
 .current_btn {
     border: #8a8a8a 1px solid;
     font-weight: bold;
@@ -60,15 +72,21 @@ button {
     margin: 2px;
     color: #ddd;
 }
+
 /*分页*/
-div.footer {text-align: center;}
+div.footer {
+    text-align: center;
+}
+
 ul.pagination {
     display: inline-block;
     padding: 0;
     margin: 0;
 }
 
-ul.pagination li {display: inline;}
+ul.pagination li {
+    display: inline;
+}
 
 ul.pagination li a {
     color: black;
@@ -78,6 +96,7 @@ ul.pagination li a {
     transition: background-color .3s;
     border: 1px solid #ddd;
 }
+
 ul.pagination li a.disabled {
     color: #ddd;
 }
@@ -98,4 +117,6 @@ ul.pagination li a.active {
     border: 1px solid burlywood;
 }
 
-ul.pagination li a:hover:not(.active) {background-color: #ddd;}
+ul.pagination li a:hover:not(.active) {
+    background-color: #ddd;
+}

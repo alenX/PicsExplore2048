@@ -7,15 +7,14 @@
 {% block body %}
     {{ super() }}
 
-    <div style="text-align: center;padding-top: 100px">
+    <div style="padding-top: 100px">
         {% for blog in blogs %}
             <div class="title_line">
                 <a href="/blog/detail/{{ blog._id }}" style="text-decoration: none"><h1>{{ blog.title }}</h1></a>
             </div>
-            <div>
-                <div class="content">
-                    <span>{{ blog.content|i_sub_str(0,30)+'......' }}</span>
-                </div>
+            <div class="title_time"><a class="time">{{ blog.datetime|safe }}</a></div>
+            <div class="content">
+                <span>{{ blog.content|i_sub_str(0,30)+'......' }}</span>
             </div>
         {% endfor %}
     </div>

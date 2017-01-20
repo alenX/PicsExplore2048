@@ -96,7 +96,7 @@ def blog_add():
 def add_content():
     paras = request.get_data()
     data = json.loads(paras)
-    data['datatime'] = datetime.datetime.now()
+    data['datetime'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     ids = blog.insert(data)
     return jsonify({'id': str(ids)})
 
