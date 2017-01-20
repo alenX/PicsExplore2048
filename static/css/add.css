@@ -31,9 +31,3 @@ div button.save_btn {
     width: 60px;
     color: green;
 }
-
-div.user_info{
-    text-align: right;
-    font-family: '微软雅黑', serif;
-    padding-right: 20%;
-}

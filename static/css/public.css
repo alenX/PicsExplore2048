@@ -63,3 +63,9 @@
     margin: 2px;
     color: #ddd;
 }
+
+div.user_info{
+    text-align: right;
+    font-family: '微软雅黑', serif;
+    padding-right: 20%;
+}
