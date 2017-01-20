@@ -1,0 +1,35 @@
+div.login_page{
+    text-align: center;
+    padding-top: 160px;
+}
+div.input_div{
+    font-size: 20px;
+    color: darkslategrey;
+    text-align: center;
+
+}
+
+div.user{
+    text-align: center;
+}
+
+input{
+    border-radius: 10px;
+    height: 20px;
+}
+
+div.submit{
+    padding-top: 20px;
+}
+
+button.btn{
+    width: 66px;
+    height: 30px;
+    border-radius: 6px;
+    border: #8a8a8a 1px solid;
+    color: burlywood;
+}
+
+span.input_span{
+    text-align: left;
+}

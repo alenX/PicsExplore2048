@@ -5,7 +5,7 @@
     <script type="application/javascript">
         $(document).ready(function () {
             var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-            var base64DecodeChars =[
+            var base64DecodeChars = [
                 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
                 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
                 -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63,
@@ -173,18 +173,20 @@
 {% block title %}登陆{% endblock %}
 {% block body %}
     {{ super() }}
-    <div>
-        <div>
-            <div>
-                <span>用户名:</span><input type="text" title="用户名" id="usn">
+    <div class="login_page">
+        <div class="input_div">
+            <div class="user">
+                <span class="input_span" >用户名:</span>
+                <a style="width:100px"><input type="text" title="用户名" id="usn" ></a>
             </div>
-            <div>
-                <span>密码:</span><input type="password" title="密码" id="pwd">
+            <div class="user" style="padding-top: 20px">
+                <span class="input_span" >密码:</span>
+                <a style="width:100px"><input type="password" title="密码" id="pwd"  ></a>
             </div>
         </div>
-        <div>
-            <div>
-                <button id="login">登陆</button>
+        <div class="submit">
+            <div class="btn">
+                <button id="login" class="btn">登陆</button>
             </div>
         </div>
     </div>
