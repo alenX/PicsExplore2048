@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css') }}">
+{% endblock %}
+{% block title %}登陆{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div>
+        <div>
+            <div>
+                <span>用户名:</span><input type="text" title="用户名" id="usn">
+            </div>
+            <div>
+                <span>密码:</span><input type="password" title="密码" id="pwd">
+            </div>
+        </div>
+        <div>
+            <div>
+                <button id="login">登陆</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
