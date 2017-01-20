@@ -41,7 +41,7 @@ is_load = False
 EVERY_NUM = 6  # 每页数量
 
 
-class User(mysql_db.Model, UserMixin):
+class User(UserMixin, mysql_db.Model):
     __tablename__ = 'users'
     id = mysql_db.Column(mysql_db.Integer, primary_key=True)
     username = mysql_db.Column(mysql_db.String(64), unique=True, index=True)
@@ -149,6 +149,13 @@ def page_not_found(error):
 @app.route('/blog/login')
 def blog_login():
     return render_template('login.html')
+
+
+@app.route('/blog/logout')
+@login_required
+def blog_logout():
+    logout_user()
+    return redirect(url_for('blog_list',current=1))
 
 
 @app.route('/blog/login/reg', methods=['POST'])

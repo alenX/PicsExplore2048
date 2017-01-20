@@ -18,8 +18,8 @@
                 url: '/blog/add_content/',
                 data: JSON.stringify({'title': $('#title').val(), 'content': ue.getContent()}),
                 type: 'POST',
-                success:function (response) {
-                    window.location.href='/blog/detail/'+response.id;
+                success: function (response) {
+                    window.location.href = '/blog/detail/' + response.id;
                 }
             })
         }
@@ -32,6 +32,10 @@
     <div class="detail_title">
         <span>题目</span><input type="text" title="主题" id="title"/>
     </div>
+    {% if current_user.is_authenticated %}
+        <div>Hi {{ current_user.username }}<a href="/blog/logout">注销</a></div>
+    {% endif %}
+
     {#<div style="text-align: center;color: #2b542c;font-size: 20px;padding-top: 50px ;width: 80%;height: 80%">
         <span style="text-align: left">内容</span>
     </div>#}
