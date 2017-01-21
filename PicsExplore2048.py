@@ -16,18 +16,22 @@ from flask_login import UserMixin, current_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 
+from ext import db as mysql_db
+from models import User
 from uploader import Uploader
 
 
 app = Flask(__name__)
 UPLOAD_FOLDER = app.root_path+'/static/cache'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'pdf'}
-app.config['SECRET_KEY'] = 'hard to guess'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
+# app.config['SECRET_KEY'] = 'hard to guess'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
+# app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
+app.config.from_object('config')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-mysql_db = SQLAlchemy(app)
+# mysql_db = SQLAlchemy(app)
+mysql_db.init_app(app)
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "/blog/login"
@@ -45,40 +49,8 @@ all_count = info.count()
 reds.set('num', random.randint(1, all_count))
 is_load = False
 EVERY_NUM = 6  # 每页数量
-
-
-class User(UserMixin, mysql_db.Model):
-    __tablename__ = 'users'
-    id = mysql_db.Column(mysql_db.Integer, primary_key=True)
-    username = mysql_db.Column(mysql_db.String(64), unique=True, index=True)
-    password_hash = mysql_db.Column(mysql_db.String(64))
-
-    # 不能读取
-    @property
-    def password(self):
-        raise Exception("you cant read it")
-
-    @password.setter
-    def password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password_hash(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def is_authenticated(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def is_active(self):
-        return True
-
-    def get_id(self):
-        return str(self.id)
-
-
-mysql_db.create_all()
+with app.app_context():
+    mysql_db.create_all()
 
 
 @app.route('/')
