@@ -14,14 +14,19 @@ from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, current_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 from uploader import Uploader
 
+
 app = Flask(__name__)
+UPLOAD_FOLDER = app.root_path+'/static/cache'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'pdf'}
 app.config['SECRET_KEY'] = 'hard to guess'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 mysql_db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
@@ -51,7 +56,7 @@ class User(UserMixin, mysql_db.Model):
     # 不能读取
     @property
     def password(self):
-        raise "you cant read it"
+        raise Exception("you cant read it")
 
     @password.setter
     def password(self, password):
@@ -206,6 +211,25 @@ def blog_login_register():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+@app.route('/blog/edit')
+def blog_edit():
+    return render_template('blog_edit.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+
+@app.route('/blog/upload', methods=['POST', 'GET'])
+def blog_upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+    return render_template('blog_edit.html')
 
 
 @app.route('/upload/', methods=['GET', 'POST', 'OPTIONS'])

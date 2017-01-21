@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>配置</title>
+</head>
+<body>
+<div>
+    <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog_upload') }}">
+        <input type="file" name="file">
+        <input type=submit value=Upload>
+    </form>
+</div>
+</body>
+</html>
