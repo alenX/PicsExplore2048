@@ -205,7 +205,7 @@ def blog_upload():
 
 
 @flask_login.user_logged_in.connect_via(app)
-def _track_logins(sender, user, **extra):
+def _track_login(sender, user, **extra):
     user.login_count += 1
     user.last_login_ip = request.remote_addr
     mysql_db.session.add(user)
