@@ -166,7 +166,7 @@ def blog_login_register():
     user_para = json.loads(paras)
 
     u = User()
-    u.password = user_para['password']
+    u.pwd = user_para['password']
     u.username = user_para['user']
     mysql_db.session.add(u)
     mysql_db.session.commit()
