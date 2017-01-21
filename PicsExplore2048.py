@@ -6,11 +6,12 @@ import random
 import redis
 import re
 import datetime
+import flask_login
 
 from PIL import Image
-from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect, g
+from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
 from bson.objectid import ObjectId
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, user_logged_in
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, current_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -20,9 +21,8 @@ from ext import db as mysql_db
 from models import User
 from uploader import Uploader
 
-
 app = Flask(__name__)
-UPLOAD_FOLDER = app.root_path+'/static/cache'
+UPLOAD_FOLDER = app.root_path + '/static/cache'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'pdf'}
 # app.config['SECRET_KEY'] = 'hard to guess'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
@@ -202,6 +202,14 @@ def blog_upload():
         if file and allowed_file(file.filename):
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
     return render_template('blog_edit.html')
+
+
+@flask_login.user_logged_in.connect_via(app)
+def _track_logins(sender, user, **extra):
+    user.login_count += 1
+    user.last_login_ip = request.remote_addr
+    mysql_db.session.add(user)
+    mysql_db.session.commit()
 
 
 @app.route('/upload/', methods=['GET', 'POST', 'OPTIONS'])

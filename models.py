@@ -9,6 +9,8 @@ class User(UserMixin, mysql_db.Model):
     id = mysql_db.Column(mysql_db.Integer, primary_key=True)
     username = mysql_db.Column(mysql_db.String(64), unique=True, index=True)
     password = mysql_db.Column(mysql_db.String(256))
+    login_count = mysql_db.Column(mysql_db.Integer,default=0)
+    last_login_ip = mysql_db.Column(mysql_db.String(32),default='unknown')
 
     # 不能读取
     @property
