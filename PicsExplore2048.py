@@ -8,11 +8,11 @@ import re
 import datetime
 
 from PIL import Image
-from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
+from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect, g
 from bson.objectid import ObjectId
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user, AnonymousUserMixin
 
 from uploader import Uploader
 
@@ -148,6 +148,8 @@ def page_not_found(error):
 
 @app.route('/blog/login')
 def blog_login():
+    if current_user.get_id():
+        return redirect(url_for('blog_list',current=1))
     return render_template('login.html')
 
 
@@ -155,7 +157,7 @@ def blog_login():
 @login_required
 def blog_logout():
     logout_user()
-    return redirect(url_for('blog_list',current=1))
+    return redirect(url_for('blog_list', current=1))
 
 
 @app.route('/blog/login/reg', methods=['POST'])
