@@ -2,11 +2,11 @@ div.detail_title h2{
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
     color: #269abc;
     text-align: center;
-    padding: 50px;
+    padding: 10px;
 }
 
 div.detail_content span{
-    padding: 2% 20% 10% 20%;
+    padding: 0 20% 10% 20%;
     color: #8a8a8a;
     text-align: center;
     display: block;
