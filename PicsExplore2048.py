@@ -13,6 +13,7 @@ from bson.objectid import ObjectId
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, current_user, AnonymousUserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from uploader import Uploader
 
@@ -45,10 +46,19 @@ class User(UserMixin, mysql_db.Model):
     __tablename__ = 'users'
     id = mysql_db.Column(mysql_db.Integer, primary_key=True)
     username = mysql_db.Column(mysql_db.String(64), unique=True, index=True)
-    password = mysql_db.Column(mysql_db.String(64))
+    password_hash = mysql_db.Column(mysql_db.String(64))
 
-    def __init__(self, id):
-        self.id = id
+    # 不能读取
+    @property
+    def password(self):
+        raise "you cant read it"
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password_hash(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def is_authenticated(self):
         return True
@@ -149,7 +159,7 @@ def page_not_found(error):
 @app.route('/blog/login')
 def blog_login():
     if current_user.get_id():
-        return redirect(url_for('blog_list',current=1))
+        return redirect(url_for('blog_list', current=1))
     return render_template('login.html')
 
 
@@ -164,7 +174,28 @@ def blog_logout():
 def blog_login_reg():
     paras = request.get_data()
     user_para = json.loads(paras)
-    user = User.query.filter_by(username=user_para['user'], password=base64.b64decode(user_para['password'])).first()
+    user = User.query.filter_by(username=user_para['user']).first()
+    if user and User.check_password_hash(user, user_para['password']):
+        # if user:
+        login_user(user)
+        return jsonify({'rs': str('true')})
+    else:
+        return jsonify({'rs': str('false')})
+
+
+@app.route('/blog/login/register', methods=['POST'])
+def blog_login_register():
+    paras = request.get_data()
+    user_para = json.loads(paras)
+
+    u = User()
+    u.password = user_para['password']
+    u.username = user_para['user']
+    mysql_db.session.add(u)
+    mysql_db.session.commit()
+
+    user = User.query.filter_by(username=u.username).first()
+
     if user:
         login_user(user)
         return jsonify({'rs': str('true')})

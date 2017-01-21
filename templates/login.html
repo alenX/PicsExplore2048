@@ -142,8 +142,8 @@
                             char2 = str.charCodeAt(i++);
                             char3 = str.charCodeAt(i++);
                             out += String.fromCharCode(((c & 0x0F) << 12) |
-                                ((char2 & 0x3F) << 6) |
-                                ((char3 & 0x3F) << 0));
+                                    ((char2 & 0x3F) << 6) |
+                                    ((char3 & 0x3F) << 0));
                             break;
                     }
                 }
@@ -166,6 +166,23 @@
                     }
                 })
             });
+
+            $('#register').click(function () {
+                var user = $('#usn').val();
+                var password = base64encode($('#pwd').val());
+                $.ajax({
+                    url: '/blog/login/register',
+                    data: JSON.stringify({'user': user, 'password': password}),
+                    type: 'POST',
+                    success: function (resp) {
+                        if (resp.rs == 'true') {
+                            window.location.href = '/blog/add';
+                        } else {
+                            window.location.href = '/blog/login';
+                        }
+                    }
+                })
+            });
         });
 
     </script>
@@ -176,17 +193,22 @@
     <div class="login_page">
         <div class="input_div">
             <div class="user">
-                <span class="input_span" >用户名:</span>
-                <a style="width:100px"><input type="text" title="用户名" id="usn" ></a>
+                <span class="input_span">用户名:</span>
+                <a style="width:100px"><input type="text" title="用户名" id="usn"></a>
             </div>
             <div class="user" style="padding-top: 20px">
-                <span class="input_span" >密码:</span>
-                <a style="width:100px"><input type="password" title="密码" id="pwd"  ></a>
+                <span class="input_span">密码:</span>
+                <a style="width:100px"><input type="password" title="密码" id="pwd"></a>
             </div>
         </div>
         <div class="submit">
             <div class="btn">
-                <button id="login" class="btn">登陆</button>
+                <a>
+                    <button id="login" class="btn">登陆</button>
+                </a>
+                <a style="padding-left: 40px">
+                    <button id="register" class="btn" style="color: white;background-color: green">注册</button>
+                </a>
             </div>
         </div>
     </div>
