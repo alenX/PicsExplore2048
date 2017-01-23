@@ -9,7 +9,7 @@ import datetime
 import flask_login
 
 from PIL import Image
-from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
+from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect, send_from_directory
 from bson.objectid import ObjectId
 from flask_login import LoginManager, login_required, login_user, logout_user, user_logged_in
 from flask_sqlalchemy import SQLAlchemy
@@ -201,7 +201,15 @@ def blog_upload():
         file = request.files['file']
         if file and allowed_file(file.filename):
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
     return render_template('blog_edit.html')
+
+
+@app.route('/blog/download/<filename>')
+def blog_download(filename):
+    if request.method == 'GET':
+        if os.path.isfile(os.path.join(app.root_path, UPLOAD_FOLDER, filename)):
+            return send_from_directory(os.path.join(app.root_path, UPLOAD_FOLDER), filename, as_attachment=True)
 
 
 @flask_login.user_logged_in.connect_via(app)
