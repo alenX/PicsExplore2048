@@ -191,6 +191,7 @@ def load_user(user_id):
 @app.route('/blog/edit')
 @login_required
 def blog_edit():
+    bs_pic = ''
     if user_mongo.find_one({'id': current_user.id}):
         img = user_mongo.find_one({'id': current_user.id})['pic_bs64']
         if img:
@@ -200,9 +201,7 @@ def blog_edit():
                 p.write(base64.b64decode(img))
                 p.flush()
             bs_pic = 'image/' + str(current_user.id) + '/' + 'header_img.jpg'
-    else:
-        bs_pic = ''
-    return render_template('blog_edit.html', image=bs_pic)
+    return render_template('blog_edit.html', image=bs_pic, time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
 
 
 def allowed_file(filename):
