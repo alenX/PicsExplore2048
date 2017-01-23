@@ -1,15 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>配置</title>
-</head>
-<body>
-<div>
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
+{% endblock %}
+{% block title %}个人信息维护{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div>
+        {% if image %}
+            <img  style="width: 60px;height: 60px;" src="{{ url_for('static',filename=image) }}">
+        {% else %}
+            <img style="width: 60px;height: 60px;" src="{{ url_for('static',filename='image/default.png') }}">
+        {% endif %}
+    </div>
     <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog_upload') }}">
         <input type="file" name="file">
         <input type=submit value=Upload>
     </form>
-</div>
-</body>
-</html>
+{% endblock %}

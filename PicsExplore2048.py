@@ -23,13 +23,15 @@ from uploader import Uploader
 
 app = Flask(__name__)
 UPLOAD_FOLDER = app.root_path + '/static/cache'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'pdf'}
+HEADER_PIC_FOLDER = app.root_path + '/static/image'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 # app.config['SECRET_KEY'] = 'hard to guess'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
 # app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
 app.config.from_object('config')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['HEADER_PIC_FOLDER'] = HEADER_PIC_FOLDER
 # mysql_db = SQLAlchemy(app)
 mysql_db.init_app(app)
 login_manager = LoginManager()
@@ -43,6 +45,7 @@ db = client['find_2048']
 blogs = client['blogs']
 info = db["bs64_info"]
 blog = blogs['blog']
+user_mongo = blogs['user']
 reds = redis.Redis(host='localhost', port=6379, db=0)
 reds.flushdb()
 all_count = info.count()
@@ -186,8 +189,20 @@ def load_user(user_id):
 
 
 @app.route('/blog/edit')
+@login_required
 def blog_edit():
-    return render_template('blog_edit.html')
+    if user_mongo.find_one({'id': current_user.id}):
+        img = user_mongo.find_one({'id': current_user.id})['pic_bs64']
+        if img:
+            if not os.path.isdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id))):
+                os.mkdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id)))
+            with open(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id), 'header_img.jpg'), "wb") as p:
+                p.write(base64.b64decode(img))
+                p.flush()
+            bs_pic = 'image/' + str(current_user.id) + '/' + 'header_img.jpg'
+    else:
+        bs_pic = ''
+    return render_template('blog_edit.html', image=bs_pic)
 
 
 def allowed_file(filename):
@@ -196,13 +211,22 @@ def allowed_file(filename):
 
 
 @app.route('/blog/upload', methods=['POST', 'GET'])
+@login_required
 def blog_upload():
     if request.method == 'POST':
         file = request.files['file']
         if file and allowed_file(file.filename):
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
             # file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-    return render_template('blog_edit.html')
+            with open(os.path.join(app.config['UPLOAD_FOLDER'], file.filename), "rb") as p:
+                pic_bs64 = base64.b64encode(p.read())
+                # user_mongo.delete_many({'id':current_user.id})
+                if user_mongo.find_one({'id': current_user.id}) is None:
+                    user_mongo.insert({'id': current_user.id, 'pic_bs64': pic_bs64})
+                else:
+                    user_mongo.update({'id': current_user.id}, {'$set': {'pic_bs64': pic_bs64}}, multi=True)
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+    return redirect(url_for('blog_edit'))
 
 
 @app.route('/blog/download/<filename>')

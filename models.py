@@ -2,6 +2,7 @@
 from flask_login import UserMixin
 from ext import db as mysql_db
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
 
 class User(UserMixin, mysql_db.Model):
@@ -11,6 +12,8 @@ class User(UserMixin, mysql_db.Model):
     password = mysql_db.Column(mysql_db.String(256))
     login_count = mysql_db.Column(mysql_db.Integer,default=0)
     last_login_ip = mysql_db.Column(mysql_db.String(32),default='unknown')
+    pic = mysql_db.Column(mysql_db.LargeBinary())
+    nickname = mysql_db.Column(mysql_db.String(64))
 
     # 不能读取
     @property
