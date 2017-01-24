@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block title %}新增MarkDown{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div class="detail_title">
+        <span style="padding-right: 30px">题目</span><input type="text" title="主题" id="title"/>
+    </div>
+    {#<div style="text-align: center;color: #2b542c;font-size: 20px;padding-top: 50px ;width: 80%;height: 80%">
+        <span style="text-align: left">内容</span>
+    </div>#}
+    <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog_markdown_upload') }}">
+        <input type="file" name="file">
+        <input type=submit value=上传 >
+    </form>
+{% endblock %}

@@ -230,6 +230,29 @@ def blog_upload():
     return redirect(url_for('blog_edit'))
 
 
+@app.route('/blog/markdown/upload', methods=['POST', 'GET'])
+@login_required
+def blog_markdown_upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and file.filename[-2:].upper() == 'MD':
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+            with open(os.path.join(app.config['UPLOAD_FOLDER'], file.filename), "r", encoding='utf-8') as p:
+                rs = ''
+                for line in p.readlines():
+                    rs += line
+                blog.insert({'content': rs})
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+    return redirect(url_for('blog_add_markdown'))
+
+
+@app.route('/blog/add/markdown', methods=['POST', 'GET'])
+@login_required
+def blog_add_markdown():
+    return render_template('blog_add_markdown.html')
+
+
 @app.route('/blog/download/<filename>')
 def blog_download(filename):
     if request.method == 'GET':
