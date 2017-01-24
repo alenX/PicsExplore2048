@@ -16,12 +16,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, current_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from flaskext.markdown import Markdown
 
 from ext import db as mysql_db
 from models import User
 from uploader import Uploader
 
 app = Flask(__name__)
+Markdown(app)
 UPLOAD_FOLDER = app.root_path + '/static/cache'
 HEADER_PIC_FOLDER = app.root_path + '/static/image'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}

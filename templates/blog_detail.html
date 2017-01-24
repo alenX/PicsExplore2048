@@ -2,14 +2,18 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
+    {#<script type="application/javascript">
+        hljs.initHighlightingOnLoad();
+    </script>#}
 {% endblock %}
 {% block title %}{{ current_blog.title }}{% endblock %}
 {% block body %}
     {{ super() }}
     <div class="detail_title">
-    <h2>{{ current_blog.title }}</h2>
+        <h2>{{ current_blog.title }}</h2>
     </div>
     <div class="detail_content">
-        <span>{{ current_blog.content }}</span>
+        <span>
+            {{ current_blog.content|markdown }}</span>
     </div>
 {% endblock %}

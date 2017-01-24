@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 {% block head %}
+{#    <link rel="stylesheet" href="{{ url_for('static',filename='highlight/style/default.min.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/public.css') }}">
     <script src="{{ url_for('static',filename='js/jquery-2.1.4.min.js') }}"></script>
+{#    <script src="{{ url_for('static',filename='highlight/highlight.min.js') }}"></script>#}
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
     {#    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">#}
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
@@ -15,7 +19,9 @@
     <div class="title_name"><a style="font-size: 15px">genhaoai@gmail.com</a>
     </div>
     {% if current_user.is_authenticated %}
-        <div class="user_info" style="padding-left: 20px">Hi<a style="padding-right: 15px;color: #3b4249;font-size: 26px"> {{ current_user.username }}</a><a style="color:#1b6d85" href="/blog/logout">注销</a></div>
+        <div class="user_info" style="padding-left: 20px">Hi<a
+                style="padding-right: 15px;color: #3b4249;font-size: 26px"> {{ current_user.username }}</a><a
+                style="color:#1b6d85" href="/blog/logout">注销</a></div>
     {% endif %}
 {% endblock %}
 </html>
