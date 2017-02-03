@@ -15,8 +15,8 @@
     <div class="head_pic">
         <img class="pic" src="{{ url_for('static', filename='image/header.jpg') }}">
     </div>
-    <div class="title_name"><a href="/blog/list/1">Blog</a></div>
-    <div class="title_name"><a style="font-size: 15px">genhaoai@gmail.com</a>
+    <div class="title_name"><a href="/blog/list/1" style="font-family: '微软雅黑', serif">Blog</a></div>
+    <div class="title_name"><a style="font-size: 15px" style="font-family: '微软雅黑', serif">genhaoai@gmail.com</a>
     </div>
     {% if current_user.is_authenticated %}
         <div class="user_info" style="padding-left: 20px">Hi<a
