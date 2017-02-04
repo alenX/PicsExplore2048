@@ -21,6 +21,7 @@ from flaskext.markdown import Markdown
 from ext import db as mysql_db
 from models import User
 from uploader import Uploader
+from decorator import login_and_admin
 
 app = Flask(__name__)
 Markdown(app)
@@ -120,6 +121,7 @@ def blog_detail(blog_id):
 
 @app.route('/blog/add')
 @login_required
+@login_and_admin
 def blog_add():
     return render_template('blog_add.html')
 
