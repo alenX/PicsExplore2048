@@ -178,6 +178,8 @@
                         if (resp.rs == 'true') {
                             window.location.href = '/blog/add';
                         } else {
+                            alert(resp.content);
+                            return;
                             window.location.href = '/blog/login';
                         }
                     }

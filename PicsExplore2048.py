@@ -175,6 +175,9 @@ def blog_login_register():
     u = User()
     u.pwd = user_para['password']
     u.username = user_para['user']
+    print(User.query.filter_by(username='admin').all())
+    if u.username == 'admin' and User.query.filter_by(username='admin').first():
+        return jsonify({'rs': str('false'), 'content': '不能使用admin用户注册'})
     mysql_db.session.add(u)
     mysql_db.session.commit()
 
