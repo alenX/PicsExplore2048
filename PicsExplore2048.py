@@ -114,7 +114,7 @@ def blog_list(current=1):
 def blog_detail(blog_id):
     current_blog = blog.find_one({'_id': ObjectId(blog_id)})  # bson
     if current_blog is None:
-        return render_template('404.html'), 404
+        return redirect(url_for('blog_list', current=1))
     return render_template('blog_detail.html', current_blog=current_blog)
 
 
