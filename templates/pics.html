@@ -5,13 +5,18 @@
     <title>explore</title>
 </head>
 <script src="../static/js/jquery-2.1.4.min.js"></script>
+<script src="../static/layer/layer.js"></script>
 <script type="application/javascript">
     function another_page(method) {
+        var index = layer.load(1, {
+            shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
         $.ajax({
             url: '/explore/' + method,
             type: 'POST',
             success: function (response) {
                 $("#img").attr('src', response.title);
+                layer.close(index)
             }, error: function (error) {
                 console.log(error);
             }
