@@ -231,8 +231,8 @@ def blog_upload():
                     user_mongo.insert({'id': current_user.id, 'pic_bs64': pic_bs64})
                 else:
                     user_mongo.update({'id': current_user.id}, {'$set': {'pic_bs64': pic_bs64}}, multi=True)
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-    return redirect(url_for('blog_edit'))
+            # os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+    return jsonify({'url':file.filename})
 
 
 @app.route('/blog/markdown/upload', methods=['POST', 'GET'])

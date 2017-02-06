@@ -2,19 +2,46 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
+    <script type="application/javascript">
+        layui.use('upload', function () {
+            layui.upload({
+                url: '/blog/upload' //上传接口
+                ,method:'post'
+                , success: function (res) { //上传成功后的回调
+                    $('#lay_pic_id').attr('src','{{ url_for('static',filename='cache/') }}'+res.url);
+
+                }
+            });
+
+           {# layui.upload({
+                url: '/test/upload.json'
+                , elem: '#test' //指定原始元素，默认直接查找class="layui-upload-file"
+                , method: 'get' //上传接口的http类型
+                , success: function (res) {
+                    LAY_demo_upload.src = res.url;
+                }
+            });#}
+        });
+    </script>
 {% endblock %}
 {% block title %}个人信息维护{% endblock %}
 {% block body %}
     {{ super() }}
     <div>
         {% if image %}
-            <img style="width: 60px;height: 60px;border-radius: 50%;" src="{{ url_for('static',filename=image,v=time) }}">
+            <img style="width: 60px;height: 60px;border-radius: 50%;"
+                 src="{{ url_for('static',filename=image,v=time) }}">
         {% else %}
-            <img style="width: 60px;height: 60px;border-radius: 50%;" src="{{ url_for('static',filename='image/default.png') }}">
+            <img style="width: 60px;height: 60px;border-radius: 50%;"
+                 src="{{ url_for('static',filename='image/default.png') }}">
         {% endif %}
     </div>
+    <div id="preview">
+    <img id="lay_pic_id" style="width: 60px;height: 60px;border-radius: 50%;" src="{{ url_for('static',filename='image/default.png') }}"/>
+    </div>
     <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog_upload') }}">
-        <input type="file" name="file">
-        <input type=submit value=上传>
+{#        <input type="file" name="file">#}
+        <input type="file" name="file" class="layui-upload-file" lay-title="添加个人头像图片">
+{#        <input type=submit value=上传>#}
     </form>
 {% endblock %}
