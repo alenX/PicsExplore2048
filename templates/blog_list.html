@@ -3,10 +3,9 @@
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
     <script type="application/javascript">
-    layui.use(['layer', 'laypage', 'element'], function () {
+    layui.use(['layer', 'laypage'], function () {
         var layer = layui.layer
-                , laypage = layui.laypage
-                , element = layui.element();
+                , laypage = layui.laypage;
 
         //分页
         laypage({
@@ -41,7 +40,7 @@
             </div>#}
         {% endfor %}
     </div>
-    <div class="footer">
+    {#<div class="footer">
         <ul class="pagination">
             {% if current==1 %}
                 <li><a class="disabled">«</a></li>
@@ -61,6 +60,6 @@
                 <li><a href="/blog/list/{{ current+1}}">»</a></li>
             {% endif %}
         </ul>
-    </div>
+    </div>#}
     <div id="pageLayui" class="footer"></div>
 {% endblock %}
