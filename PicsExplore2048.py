@@ -54,7 +54,7 @@ reds.flushdb()
 all_count = info.count()
 reds.set('num', random.randint(1, all_count))
 is_load = False
-EVERY_NUM = 6  # 每页数量
+EVERY_NUM = 3  # 每页数量
 with app.app_context():
     mysql_db.create_all()
 

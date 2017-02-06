@@ -2,6 +2,29 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
+    <script type="application/javascript">
+    layui.use(['layer', 'laypage', 'element'], function () {
+        var layer = layui.layer
+                , laypage = layui.laypage
+                , element = layui.element();
+
+        //分页
+        laypage({
+            cont: 'pageLayui' //分页容器的id
+            , pages: {{ pages }} //总页数
+{#            , skin: '#5FB878' //自定义选中色值#}
+            , skin: '#DEB887' //自定义选中色值
+            , skip: false //开启跳页
+            , jump: function (obj, first) {
+                if (!first) {
+                    var curr = obj.curr;
+                    window.location.href = '/blog/list/'+curr+'#!fenye='+curr;
+                }
+            },hash:'fenye',
+            curr:location.hash.replace('#!fenye=', '')
+        });
+    });
+</script>
 {% endblock %}
 {% block title %}首页{% endblock %}
 {% block body %}
@@ -38,24 +61,6 @@
                 <li><a href="/blog/list/{{ current+1}}">»</a></li>
             {% endif %}
         </ul>
-        {#<div class="page">
-            {% if current==1 %}
-                <button class="disabled">&lt; </button>
-            {% else %}
-                <button href="/blog/list/{{ current-1 }}">&lt; </button>
-            {% endif %}
-            {% for d in range(1,pages+1) %}
-                {% if current==d %}
-                    <button class="current_btn">{{ d }}</button>
-                {% else %}
-                    <button href="/blog/list/{{ d }}">{{ d }} </button>
-                {% endif %}
-            {% endfor %}
-            {% if current==pages %}
-                <button class="disabled">&gt; </button>
-            {% else %}
-                <button href="/blog/list/{{ current+1}}">&gt;  </button>
-            {% endif %}
-        </div>#}
     </div>
+    <div id="pageLayui" class="footer"></div>
 {% endblock %}
