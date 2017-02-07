@@ -2,9 +2,6 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
-    {#<script type="application/javascript">
-        hljs.initHighlightingOnLoad();
-    </script>#}
 {% endblock %}
 {% block title %}{{ current_blog.title }}{% endblock %}
 {% block body %}
@@ -12,8 +9,10 @@
     <div class="detail_title">
         <h2>{{ current_blog.title }}</h2>
     </div>
-    <div class="detail_content">
-        <span>
-            {{ current_blog.content|markdown }}</span>
+    <div class="detail_content" >
+        <span id="content"></span>
     </div>
+    <script>
+        document.getElementById('content').innerHTML =marked("{{ current_blog.content|i_normal_markdown }}");
+    </script>
 {% endblock %}

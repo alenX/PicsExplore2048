@@ -64,6 +64,11 @@ def hello_world():
     return redirect(url_for('explore_pic'))
 
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
 @app.route('/explore')
 def explore_pic():
     pic_path = os.path.join(app.root_path + '/static/cache/image/')
@@ -231,8 +236,8 @@ def blog_upload():
                     user_mongo.insert({'id': current_user.id, 'pic_bs64': pic_bs64})
                 else:
                     user_mongo.update({'id': current_user.id}, {'$set': {'pic_bs64': pic_bs64}}, multi=True)
-            # os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-    return jsonify({'url':file.filename})
+                    # os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
+    return jsonify({'url': file.filename})
 
 
 @app.route('/blog/markdown/upload', methods=['POST', 'GET'])
@@ -398,6 +403,13 @@ def i_sub_str(i_str, s, e):
     return i_str[s:e]
 
 
+def i_normal_markdown(i_str):
+    print(i_str)
+    print(i_str.replace("\n", "\\n"))
+    return i_str.replace("\n", "\\n")
+
+
 if __name__ == '__main__':
     jinja_env.filters['i_sub_str'] = i_sub_str
+    jinja_env.filters['i_normal_markdown'] = i_normal_markdown
     app.run()
