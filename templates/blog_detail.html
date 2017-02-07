@@ -2,6 +2,9 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='highlight/style/monokai_sublime.min.css') }}">
+    <script src="{{ url_for('static',filename='highlight/highlight.min.js') }}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
 {% block title %}{{ current_blog.title }}{% endblock %}
 {% block body %}
@@ -9,10 +12,31 @@
     <div class="detail_title">
         <h2>{{ current_blog.title }}</h2>
     </div>
-    <div class="detail_content" >
+    <div class="detail_content">
         <span id="content"></span>
     </div>
     <script>
-        document.getElementById('content').innerHTML =marked("{{ current_blog.content|i_normal_markdown }}");
+        {#{{ current_blog.content|i_normal_markdown }}#}
+        console.log("{{ current_blog.content|i_normal_markdown }}".replace('&gt;', '>'));
+        var rendererMD = new marked.Renderer();
+        marked.setOptions({
+            renderer: rendererMD,
+            gfm: true,
+            tables: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: false
+        });
+        var markdownString = '```js\n console.log("hello"); \n```';
+        marked.setOptions({
+            highlight: function (code) {
+                return hljs.highlightAuto(code).value;
+            }
+        });
+        {#        document.getElementById('content').innerHTML = marked("{{ current_blog.content|i_normal_markdown }}".replace('&gt;', '>').replace('&&#39;', "'"));#}
+        document.getElementById('content').innerHTML = marked("{{ current_blog.content|safe|i_normal_markdown }}");
+        {#                document.getElementById('content').innerHTML = marked(markdownString);#}
     </script>
 {% endblock %}

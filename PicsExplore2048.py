@@ -404,8 +404,6 @@ def i_sub_str(i_str, s, e):
 
 
 def i_normal_markdown(i_str):
-    print(i_str)
-    print(i_str.replace("\n", "\\n"))
     return i_str.replace("\n", "\\n")
 
 
