@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
     <script type="application/javascript">
     layui.use(['layer', 'laypage'], function () {
         var layer = layui.layer
