@@ -1,4 +1,4 @@
-div.detail_title h2{
+div.detail_title h2 {
     font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
     color: #269abc;
     text-align: center;
@@ -6,9 +6,9 @@ div.detail_title h2{
     font-size: 26px;
 }
 
-/*div.detail_content span{*/
-    /*!*padding: 0 20% 10% 20%;*!*/
-    /*color: #8a8a8a;*/
-    /*!*text-align: left;*!*/
-    /*display: block;*/
-/*}*/
+div.detail_content {
+    padding: 0 20% 10% 20%;
+    color: #8a8a8a;
+    /*text-align: left;*/
+    display: block;
+}
