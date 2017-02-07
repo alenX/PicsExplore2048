@@ -252,7 +252,7 @@ def blog_markdown_upload():
                 rs = ''
                 for line in p.readlines():
                     rs += line
-                blog.insert({'content': rs})
+                blog.insert({'title': request.form['title'], 'content': rs})
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
     return redirect(url_for('blog_add_markdown'))
 
