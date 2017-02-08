@@ -8,11 +8,11 @@
 
     <script type="application/javascript">
 
-        {#$(document).ready(function () {
+        $(document).ready(function () {
             $('#button_upload').click(function () {
                 $('#file').submit();
             });
-        });#}
+        });
     </script>
     {#<div style="text-align: center;color: #2b542c;font-size: 20px;padding-top: 50px ;width: 80%;height: 80%">
         <span style="text-align: left">内容</span>
@@ -23,6 +23,6 @@
         </div>#}
         <input type="text" name="title" id="title" title="标题">
         <input type="file" name="file" id="md_file">
-        <input type=submit value=上传 id="button_upload">
+        <input type=button value=上传 id="button_upload">
     </form>
 {% endblock %}
