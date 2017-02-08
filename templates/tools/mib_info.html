@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block title %}新增MarkDown{% endblock %}
+{% block body %}
+    {{ super() }}
+
+    <script type="application/javascript">
+
+        $(document).ready(function () {
+            $('#button_upload').click(function () {
+                $('#file').submit();
+            });
+
+
+            $('#query').click(function () {
+                var mib_name = $('#mib_name').val();
+                $.ajax({
+                    url: '/mib/query',
+                    method: 'post',
+                    data: {'mib_name': mib_name},
+                    success: function (res) {
+                        $('#desc').val(res.desc);
+                        alert(res.desc);
+                    }
+                })
+            })
+
+        });
+
+
+    </script>
+    <form id="file" enctype=multipart/form-data method="post" action="/mib/upload">
+        <input type="text" name="title" id="title" title="标题">
+        <input type="file" name="file" id="md_file" multiple>
+        <input type=button value=上传 id="button_upload">
+    </form>
+    mib_name:<input id="mib_name" value="" title="mib_name">
+    desc:<textarea id="desc"   title="desc" readonly disabled rows="3" cols="3"></textarea>
+    <button id="query">查询</button>
+{% endblock %}

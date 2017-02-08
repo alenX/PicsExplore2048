@@ -48,6 +48,7 @@ db = client['find_2048']
 blogs = client['blogs']
 info = db["bs64_info"]
 blog = blogs['blog']
+mib_info = blogs['mib_info']
 user_mongo = blogs['user']
 reds = redis.Redis(host='localhost', port=6379, db=0)
 reds.flushdb()
@@ -397,6 +398,44 @@ def upload():
     res.headers['Access-Control-Allow-Origin'] = '*'
     res.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,X_Requested_With'
     return res
+
+
+@app.route('/mib/index')
+def mib_index():
+    return render_template('tools/mib_info.html')
+
+
+@app.route('/mib/upload', methods=['POST', 'GET'])
+def mib_upload():
+    if request.method == 'POST':
+        files = request.files.getlist("file")
+        for f in filter(lambda d: str(d.filename).endswith('.mib'), files):
+            mib_file_name = f.filename
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(mib_file_name)))
+            with open(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name), "r") as p:
+                line = ''
+                for mib in p.readlines():
+                    s = mib[:-1]
+                    if 'OBJECT-TYPE' in s:
+                        if 'DESCRIPTION' in line.strip() and line.strip().startswith('zx'):
+                            mib_line = line.strip()
+                            mib_name = mib_line.split()[0]
+                            mib_desc = mib_line.split('DESCRIPTION')[1].strip().split('"')[1]
+                            mib_info.insert(
+                                {'mib_name': mib_name, 'mib_desc': mib_desc, 'time': datetime.datetime.now()})
+                        line = ''
+                    line += s
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name))
+    return redirect(url_for('mib_index'))
+
+
+@app.route('/mib/query',methods=['GET','POST'])
+def mib_query():
+    mib_name = request.form['mib_name']
+    mib = mib_info.find_one({'mib_name': mib_name})
+    if mib:
+        return jsonify({'desc': mib['mib_desc']})
+    return jsonify({'desc': '不存在该记录'})
 
 
 def i_sub_str(i_str, s, e):
