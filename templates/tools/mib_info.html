@@ -2,9 +2,9 @@
 {% block head %}
     {{ super() }}
 {% endblock %}
-{% block title %}新增MarkDown{% endblock %}
+{% block title %}Mib查询{% endblock %}
 {% block body %}
-    {{ super() }}
+{#    {{ super() }}#}
 
     <script type="application/javascript">
 
@@ -31,11 +31,10 @@
 
     </script>
     <form id="file" enctype=multipart/form-data method="post" action="/mib/upload">
-        <input type="text" name="title" id="title" title="标题">
         <input type="file" name="file" id="md_file" multiple>
         <input type=button value=上传 id="button_upload">
     </form>
     mib_name:<input style="width: 100%;height: 30px" id="mib_name" value="" title="mib_name"><br>
-    desc:<input style="width: 100%;height: 30px" id="desc"   title="desc" readonly disabled  >
+    desc:<input style="width: 100%;height: 30px;background-color: #5bc0de" id="desc"   title="desc" readonly  >
     <button id="query">查询</button>
 {% endblock %}
