@@ -432,7 +432,7 @@ def mib_upload():
 @app.route('/mib/query', methods=['GET', 'POST'])
 def mib_query():
     mib_name = request.form['mib_name']
-    mib = mib_info.find_one({'mib_name': mib_name})
+    mib = mib_info.find_one({'mib_name': str(mib_name).strip()})
     if mib:
         return jsonify({'desc': mib['mib_desc']})
     return jsonify({'desc': '不存在该记录'})
