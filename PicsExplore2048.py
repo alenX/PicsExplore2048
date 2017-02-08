@@ -429,7 +429,7 @@ def mib_upload():
     return redirect(url_for('mib_index'))
 
 
-@app.route('/mib/query',methods=['GET','POST'])
+@app.route('/mib/query', methods=['GET', 'POST'])
 def mib_query():
     mib_name = request.form['mib_name']
     mib = mib_info.find_one({'mib_name': mib_name})
