@@ -25,17 +25,8 @@ from decorator import login_and_admin
 
 app = Flask(__name__)
 Markdown(app)
-UPLOAD_FOLDER = app.root_path + '/static/cache'
-HEADER_PIC_FOLDER = app.root_path + '/static/image'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-# app.config['SECRET_KEY'] = 'hard to guess'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:1128@localhost:3306/blog?charset=utf8'
-# app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # warning信息屏蔽
 app.config.from_object('config')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['HEADER_PIC_FOLDER'] = HEADER_PIC_FOLDER
-# mysql_db = SQLAlchemy(app)
 mysql_db.init_app(app)
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
