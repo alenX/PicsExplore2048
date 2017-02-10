@@ -1,29 +1,21 @@
 # -*- coding: utf-8 -*-
 import base64
 import os
-import pymongo
 import random
-import redis
 import re
-import datetime
-import flask_login
 
+import pymongo
+import redis
 from PIL import Image
-from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect, send_from_directory
-from bson.objectid import ObjectId
-from flask_login import LoginManager, login_required, login_user, logout_user, user_logged_in
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, current_user, AnonymousUserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
+from flask_login import LoginManager
 from flaskext.markdown import Markdown
 
 from ext import db as mysql_db
 from models import User
 from uploader import Uploader
-from decorator import login_and_admin
-from views.mib_view import mib_v
 from views.blog_view import blog_v
+from views.mib_view import mib_v
 
 app = Flask(__name__)
 Markdown(app)
@@ -53,11 +45,6 @@ with app.app_context():
 @app.route('/')
 def hello_world():
     return redirect(url_for('explore_pic'))
-
-
-@app.route('/test')
-def test():
-    return render_template('test.html')
 
 
 @app.route('/explore')
@@ -225,44 +212,6 @@ def upload():
     res.headers['Access-Control-Allow-Origin'] = '*'
     res.headers['Access-Control-Allow-Headers'] = 'X-Requested-With,X_Requested_With'
     return res
-
-
-# @app.route('/mib/index')
-# def mib_index():
-#     return render_template('tools/mib_info.html')
-#
-#
-# @app.route('/mib/upload', methods=['POST', 'GET'])
-# def mib_upload():
-#     if request.method == 'POST':
-#         files = request.files.getlist("file")
-#         for f in filter(lambda d: str(d.filename).endswith('.mib'), files):
-#             mib_file_name = f.filename
-#             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(mib_file_name)))
-#             with open(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name), "r") as p:
-#                 line = ''
-#                 for mib in p.readlines():
-#                     s = mib[:-1]
-#                     if 'OBJECT-TYPE' in s:
-#                         if 'DESCRIPTION' in line.strip() and line.strip().startswith('zx'):
-#                             mib_line = line.strip()
-#                             mib_name = mib_line.split()[0]
-#                             mib_desc = mib_line.split('DESCRIPTION')[1].strip().split('"')[1]
-#                             mib_info.insert(
-#                                 {'mib_name': mib_name, 'mib_desc': mib_desc, 'time': datetime.datetime.now()})
-#                         line = ''
-#                     line += s
-#             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name))
-#     return redirect(url_for('mib_index'))
-#
-#
-# @app.route('/mib/query', methods=['GET', 'POST'])
-# def mib_query():
-#     mib_name = request.form['mib_name']
-#     mib = mib_info.find_one({'mib_name': str(mib_name).strip()})
-#     if mib:
-#         return jsonify({'desc': mib['mib_desc']})
-#     return jsonify({'desc': '不存在该记录'})
 
 
 def i_sub_str(i_str, s, e):

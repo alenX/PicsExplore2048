@@ -26,7 +26,6 @@ EVERY_NUM = 3  # 每页数量
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 
-
 @blog_v.route('/blog/list/<int:current>')
 def blog_list(current=1):
     all_num = blog.count()
@@ -164,7 +163,8 @@ def blog_markdown_upload():
                 rs = ''
                 for line in p.readlines():
                     rs += line
-                blog.insert({'title': request.form['title'], 'content': rs})
+                blog.insert({'title': request.form['title'], 'content': rs,
+                             'datetime': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')})
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
     return redirect(url_for('blog.blog_add_markdown'))
 
