@@ -26,6 +26,8 @@ from decorator import login_and_admin
 app = Flask(__name__)
 Markdown(app)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER']=app.root_path+'/static/cache'
+app.config['HEADER_PIC_FOLDER']=app.root_path+'/static/image'
 app.config.from_object('config')
 mysql_db.init_app(app)
 login_manager = LoginManager()
