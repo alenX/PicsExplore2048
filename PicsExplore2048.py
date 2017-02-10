@@ -22,12 +22,11 @@ from ext import db as mysql_db
 from models import User
 from uploader import Uploader
 from decorator import login_and_admin
+from views.mib_view import mib_v
 
 app = Flask(__name__)
 Markdown(app)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER']=app.root_path+'/static/cache'
-app.config['HEADER_PIC_FOLDER']=app.root_path+'/static/image'
 app.config.from_object('config')
 mysql_db.init_app(app)
 login_manager = LoginManager()
@@ -393,42 +392,42 @@ def upload():
     return res
 
 
-@app.route('/mib/index')
-def mib_index():
-    return render_template('tools/mib_info.html')
-
-
-@app.route('/mib/upload', methods=['POST', 'GET'])
-def mib_upload():
-    if request.method == 'POST':
-        files = request.files.getlist("file")
-        for f in filter(lambda d: str(d.filename).endswith('.mib'), files):
-            mib_file_name = f.filename
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(mib_file_name)))
-            with open(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name), "r") as p:
-                line = ''
-                for mib in p.readlines():
-                    s = mib[:-1]
-                    if 'OBJECT-TYPE' in s:
-                        if 'DESCRIPTION' in line.strip() and line.strip().startswith('zx'):
-                            mib_line = line.strip()
-                            mib_name = mib_line.split()[0]
-                            mib_desc = mib_line.split('DESCRIPTION')[1].strip().split('"')[1]
-                            mib_info.insert(
-                                {'mib_name': mib_name, 'mib_desc': mib_desc, 'time': datetime.datetime.now()})
-                        line = ''
-                    line += s
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name))
-    return redirect(url_for('mib_index'))
-
-
-@app.route('/mib/query', methods=['GET', 'POST'])
-def mib_query():
-    mib_name = request.form['mib_name']
-    mib = mib_info.find_one({'mib_name': str(mib_name).strip()})
-    if mib:
-        return jsonify({'desc': mib['mib_desc']})
-    return jsonify({'desc': '不存在该记录'})
+# @app.route('/mib/index')
+# def mib_index():
+#     return render_template('tools/mib_info.html')
+#
+#
+# @app.route('/mib/upload', methods=['POST', 'GET'])
+# def mib_upload():
+#     if request.method == 'POST':
+#         files = request.files.getlist("file")
+#         for f in filter(lambda d: str(d.filename).endswith('.mib'), files):
+#             mib_file_name = f.filename
+#             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(mib_file_name)))
+#             with open(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name), "r") as p:
+#                 line = ''
+#                 for mib in p.readlines():
+#                     s = mib[:-1]
+#                     if 'OBJECT-TYPE' in s:
+#                         if 'DESCRIPTION' in line.strip() and line.strip().startswith('zx'):
+#                             mib_line = line.strip()
+#                             mib_name = mib_line.split()[0]
+#                             mib_desc = mib_line.split('DESCRIPTION')[1].strip().split('"')[1]
+#                             mib_info.insert(
+#                                 {'mib_name': mib_name, 'mib_desc': mib_desc, 'time': datetime.datetime.now()})
+#                         line = ''
+#                     line += s
+#             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], mib_file_name))
+#     return redirect(url_for('mib_index'))
+#
+#
+# @app.route('/mib/query', methods=['GET', 'POST'])
+# def mib_query():
+#     mib_name = request.form['mib_name']
+#     mib = mib_info.find_one({'mib_name': str(mib_name).strip()})
+#     if mib:
+#         return jsonify({'desc': mib['mib_desc']})
+#     return jsonify({'desc': '不存在该记录'})
 
 
 def i_sub_str(i_str, s, e):
@@ -442,4 +441,5 @@ def i_normal_markdown(i_str):
 if __name__ == '__main__':
     jinja_env.filters['i_sub_str'] = i_sub_str
     jinja_env.filters['i_normal_markdown'] = i_normal_markdown
+    app.register_blueprint(mib_v)
     app.run()
