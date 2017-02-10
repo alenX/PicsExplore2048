@@ -23,6 +23,7 @@ from models import User
 from uploader import Uploader
 from decorator import login_and_admin
 from views.mib_view import mib_v
+from views.blog_view import blog_v
 
 app = Flask(__name__)
 Markdown(app)
@@ -39,9 +40,6 @@ client = pymongo.MongoClient("localhost", 27017)
 db = client['find_2048']
 blogs = client['blogs']
 info = db["bs64_info"]
-blog = blogs['blog']
-mib_info = blogs['mib_info']
-user_mongo = blogs['user']
 reds = redis.Redis(host='localhost', port=6379, db=0)
 reds.flushdb()
 all_count = info.count()
@@ -98,177 +96,14 @@ def down_image():
         return {'title': '../static/cache/image/' + title, 'height': p.size[0], 'width': p.size[1]}
 
 
-@app.route('/blog/list/<int:current>')
-def blog_list(current=1):
-    all_num = blog.count()
-    if all_num % EVERY_NUM == 0:
-        pages = all_num // EVERY_NUM
-    else:
-        pages = all_num // EVERY_NUM + 1
-    all_blog = blog.find().limit(EVERY_NUM).skip((current - 1) * EVERY_NUM)
-    return render_template('blog_list.html', blogs=all_blog, pages=pages, current=current)
-
-
-@app.route('/blog/detail/<string:blog_id>')
-def blog_detail(blog_id):
-    current_blog = blog.find_one({'_id': ObjectId(blog_id)})  # bson
-    if current_blog is None:
-        return redirect(url_for('blog_list', current=1))
-    return render_template('blog_detail.html', current_blog=current_blog)
-
-
-@app.route('/blog/add')
-@login_required
-@login_and_admin
-def blog_add():
-    return render_template('blog_add.html')
-
-
-@app.route('/blog/add_content/', methods=['POST'])
-def add_content():
-    paras = request.get_data()
-    data = json.loads(paras)
-    data['datetime'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    ids = blog.insert(data)
-    return jsonify({'id': str(ids)})
-
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
 
-@app.route('/blog/login')
-def blog_login():
-    if current_user.get_id():
-        return redirect(url_for('blog_list', current=1))
-    return render_template('login.html')
-
-
-@app.route('/blog/logout')
-@login_required
-def blog_logout():
-    logout_user()
-    return redirect(url_for('blog_list', current=1))
-
-
-@app.route('/blog/login/reg', methods=['POST'])
-def blog_login_reg():
-    paras = request.get_data()
-    user_para = json.loads(paras)
-    user = User.query.filter_by(username=user_para['user']).first()
-    if user and User.check_password_hash(user, user_para['password']):
-        # if user:
-        login_user(user)
-        return jsonify({'rs': str('true')})
-    else:
-        return jsonify({'rs': str('false')})
-
-
-@app.route('/blog/login/register', methods=['POST'])
-def blog_login_register():
-    paras = request.get_data()
-    user_para = json.loads(paras)
-
-    u = User()
-    u.pwd = user_para['password']
-    u.username = user_para['user']
-    print(User.query.filter_by(username='admin').all())
-    if u.username == 'admin' and User.query.filter_by(username='admin').first():
-        return jsonify({'rs': str('false'), 'content': '不能使用admin用户注册'})
-    mysql_db.session.add(u)
-    mysql_db.session.commit()
-
-    user = User.query.filter_by(username=u.username).first()
-
-    if user:
-        login_user(user)
-        return jsonify({'rs': str('true')})
-    else:
-        return jsonify({'rs': str('false')})
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-@app.route('/blog/edit')
-@login_required
-def blog_edit():
-    bs_pic = ''
-    if user_mongo.find_one({'id': current_user.id}):
-        img = user_mongo.find_one({'id': current_user.id})['pic_bs64']
-        if img:
-            if not os.path.isdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id))):
-                os.mkdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id)))
-            with open(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id), 'header_img.jpg'), "wb") as p:
-                p.write(base64.b64decode(img))
-                p.flush()
-            bs_pic = 'image/' + str(current_user.id) + '/' + 'header_img.jpg'
-    return render_template('blog_edit.html', image=bs_pic, time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-
-@app.route('/blog/upload', methods=['POST', 'GET'])
-@login_required
-def blog_upload():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-            with open(os.path.join(app.config['UPLOAD_FOLDER'], file.filename), "rb") as p:
-                pic_bs64 = base64.b64encode(p.read())
-                # user_mongo.delete_many({'id':current_user.id})
-                if user_mongo.find_one({'id': current_user.id}) is None:
-                    user_mongo.insert({'id': current_user.id, 'pic_bs64': pic_bs64})
-                else:
-                    user_mongo.update({'id': current_user.id}, {'$set': {'pic_bs64': pic_bs64}}, multi=True)
-                    # os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-    return jsonify({'url': file.filename})
-
-
-@app.route('/blog/markdown/upload', methods=['POST', 'GET'])
-@login_required
-def blog_markdown_upload():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and file.filename[-2:].upper() == 'MD':
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-            with open(os.path.join(app.config['UPLOAD_FOLDER'], file.filename), "r", encoding='utf-8') as p:
-                rs = ''
-                for line in p.readlines():
-                    rs += line
-                blog.insert({'title': request.form['title'], 'content': rs})
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
-    return redirect(url_for('blog_add_markdown'))
-
-
-@app.route('/blog/add/markdown', methods=['POST', 'GET'])
-@login_required
-def blog_add_markdown():
-    return render_template('blog_add_markdown.html')
-
-
-@app.route('/blog/download/<filename>')
-def blog_download(filename):
-    if request.method == 'GET':
-        if os.path.isfile(os.path.join(app.root_path, UPLOAD_FOLDER, filename)):
-            return send_from_directory(os.path.join(app.root_path, UPLOAD_FOLDER), filename, as_attachment=True)
-
-
-@flask_login.user_logged_in.connect_via(app)
-def _track_login(sender, user, **extra):
-    user.login_count += 1
-    user.last_login_ip = request.remote_addr
-    mysql_db.session.add(user)
-    mysql_db.session.commit()
 
 
 @app.route('/upload/', methods=['GET', 'POST', 'OPTIONS'])
@@ -442,4 +277,5 @@ if __name__ == '__main__':
     jinja_env.filters['i_sub_str'] = i_sub_str
     jinja_env.filters['i_normal_markdown'] = i_normal_markdown
     app.register_blueprint(mib_v)
+    app.register_blueprint(blog_v)
     app.run()

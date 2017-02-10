@@ -17,7 +17,6 @@ mib_v = Blueprint('mib', __name__, template_folder='templates')
 
 @mib_v.route('/mib/index')
 def mib_index():
-    print('1234')
     return render_template('tools/mib_info.html')
 
 
