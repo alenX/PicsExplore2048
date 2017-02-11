@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
+    <script type="application/javascript">
+    layui.use(['layer', 'laypage'], function () {
+        var layer = layui.layer
+                , laypage = layui.laypage;
+
+        //分页
+        laypage({
+            cont: 'pageLayui' //分页容器的id
+            , pages: {{ pages }} //总页数
+{#            , skin: '#5FB878' //自定义选中色值#}
+            , skin: '#DEB887' //自定义选中色值
+            , skip: false //开启跳页
+            , jump: function (obj, first) {
+                if (!first) {
+                    var curr = obj.curr;
+                    window.location.href = '/blog/edit/list/'+curr+'#!fenye='+curr;
+                }
+            },hash:'fenye',
+            curr:location.hash.replace('#!fenye=', '')
+        });
+    });
+</script>
+{% endblock %}
+{% block title %}首页{% endblock %}
+{% block body %}
+    {{ super() }}
+
+    <div style="padding-top: 100px">
+        {% for blog in blogs %}
+             <tr>{{ blog.title }}</tr>
+        {% endfor %}
+    </div>
+    <div id="pageLayui" class="footer"></div>
+{% endblock %}

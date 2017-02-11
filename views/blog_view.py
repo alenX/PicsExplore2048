@@ -189,3 +189,14 @@ def _track_login(sender, user, **extra):
     user.last_login_ip = request.remote_addr
     mysql_db.session.add(user)
     mysql_db.session.commit()
+
+
+@blog_v.route('/blog/edit/delete')
+def blog_edit_delete():
+    blog_id = request.args['_id']
+    print(blog_id)
+    try:
+        blog.remove({'_id': ObjectId(blog_id)})
+        return jsonify({'succ': '1'})
+    except:
+        return jsonify({'succ': '0'})

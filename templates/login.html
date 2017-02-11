@@ -181,10 +181,9 @@
                         type: 'POST',
                         success: function (resp) {
                             if (resp.rs == 'true') {
-                                window.location.href = '/blog/add';
+                                window.location.href = '/blog/list/1';
                             } else {
                                 layer.msg(resp.content);
-                                return;
                                 window.location.href = '/blog/login';
                             }
                         }
