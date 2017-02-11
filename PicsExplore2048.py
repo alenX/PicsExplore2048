@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-import base64
 import os
-import random
 import re
 
 import pymongo
-import redis
-from PIL import Image
-from flask import Flask, render_template, jsonify, request, json, make_response, url_for, redirect
+from flask import Flask, render_template, request, json, make_response, url_for, redirect
 from flask_login import LoginManager
 from flaskext.markdown import Markdown
 
@@ -16,6 +12,7 @@ from models import User
 from uploader import Uploader
 from views.blog_view import blog_v
 from views.mib_view import mib_v
+from views.pic_view import pic_v
 
 app = Flask(__name__)
 Markdown(app)
@@ -32,10 +29,7 @@ client = pymongo.MongoClient("localhost", 27017)
 db = client['find_2048']
 blogs = client['blogs']
 info = db["bs64_info"]
-reds = redis.Redis(host='localhost', port=6379, db=0)
-reds.flushdb()
-all_count = info.count()
-reds.set('num', random.randint(1, all_count))
+
 is_load = False
 EVERY_NUM = 3  # 每页数量
 with app.app_context():
@@ -44,43 +38,7 @@ with app.app_context():
 
 @app.route('/')
 def hello_world():
-    return redirect(url_for('explore_pic'))
-
-
-@app.route('/explore')
-def explore_pic():
-    pic_path = os.path.join(app.root_path + '/static/cache/image/')
-    for root, dirs, files in os.walk(pic_path):
-        reds.set(files, files)
-    return render_template('pics.html', pic_url='../static/image/225_133828_b3e21.jpg')
-
-
-@app.route('/explore/next', methods=['POST'])
-def explore_pic_next():
-    print(reds.get('num'))
-    reds.set('num', int(reds.get('num')) + 1)
-    pics = down_image()
-    return jsonify(pics)
-
-
-@app.route('/explore/pre', methods=['POST'])
-def explore_pic_pre():
-    print(reds.get('num'))
-    reds.set('num', int(reds.get('num')) - 1)
-    pics = down_image()
-    return jsonify(pics)
-
-
-def down_image():
-    for i in info.find().limit(1).skip(int(int(reds.get('num')) % all_count) + 1):
-        title = i['title']
-        if reds.exists(title) == 0:  # 避免重复下载
-            with open(os.path.join(app.root_path + '/static/cache/image/', title), "wb") as t:
-                t.write(base64.b64decode(i['bs64']))
-                t.flush()
-            reds.set(str(title), str(title) + '')
-        p = Image.open(os.path.join(app.root_path + '/static/cache/image/', title))
-        return {'title': '../static/cache/image/' + title, 'height': p.size[0], 'width': p.size[1]}
+    return redirect(url_for('pic.explore_pic'))
 
 
 @app.errorhandler(404)
@@ -227,4 +185,5 @@ if __name__ == '__main__':
     jinja_env.filters['i_normal_markdown'] = i_normal_markdown
     app.register_blueprint(mib_v)
     app.register_blueprint(blog_v)
+    app.register_blueprint(pic_v)
     app.run()

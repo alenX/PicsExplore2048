@@ -175,12 +175,12 @@ def blog_add_markdown():
     return render_template('blog_add_markdown.html')
 
 
-@blog_v.route('/blog/download/<filename>')
-def blog_download(filename):
-    if request.method == 'GET':
-        if os.path.isfile(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename)):
-            return send_from_directory(os.path.join(app.root_path, app.config['UPLOAD_FOLDER']), filename,
-                                       as_attachment=True)
+# @blog_v.route('/blog/download/<filename>')
+# def blog_download(filename):
+#     if request.method == 'GET':
+#         if os.path.isfile(os.path.join(app.root_path, app.config['UPLOAD_FOLDER'], filename)):
+#             return send_from_directory(os.path.join(app.root_path, app.config['UPLOAD_FOLDER']), filename,
+#                                        as_attachment=True)
 
 
 @flask_login.user_logged_in.connect_via(app)
