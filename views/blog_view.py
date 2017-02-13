@@ -194,7 +194,6 @@ def _track_login(sender, user, **extra):
 @blog_v.route('/blog/edit/delete')
 def blog_edit_delete():
     blog_id = request.args['_id']
-    print(blog_id)
     try:
         blog.remove({'_id': ObjectId(blog_id)})
         return jsonify({'succ': '1'})
