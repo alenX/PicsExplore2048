@@ -6,6 +6,7 @@ import pymongo
 from flask import Flask, render_template, request, json, make_response, url_for, redirect
 from flask_login import LoginManager
 from flaskext.markdown import Markdown
+from flask_sslify import SSLify
 
 from ext import db as mysql_db
 from models import User
@@ -23,6 +24,7 @@ login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "/blog/login"
 login_manager.init_app(app)
+sslfy = SSLify(app)
 jinja_env = app.jinja_env
 
 client = pymongo.MongoClient("localhost", 27017)
@@ -186,4 +188,5 @@ if __name__ == '__main__':
     app.register_blueprint(mib_v)
     app.register_blueprint(blog_v)
     app.register_blueprint(pic_v)
-    app.run()
+    app.run(ssl_context=('C:\\OpenSSL-Win64\\wangss-test\\server.crt', 'C:\\OpenSSL-Win64\\wangss-test\\server.key'),
+            threaded=True)
