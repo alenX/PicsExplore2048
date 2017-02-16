@@ -184,7 +184,8 @@
                                 window.location.href = '/blog/list/1';
                             } else {
                                 layer.msg(resp.content);
-                                window.location.href = '/blog/login';
+                                return;
+{#                                window.location.href = '/blog/login';#}
                             }
                         }
                     })
