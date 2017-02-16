@@ -13,7 +13,16 @@
             src="{{ url_for('static', filename='ue/lang/zh-cn/zh-cn.js') }}"></script>
 
     <script type="application/javascript">
+        var layer;
+        layui.use('layer', function () {
+            layer = layui.layer;
+        });
         function save_btn() {
+            var title = $('#title').val();
+            if (title.trim() == '') {
+                layer.msg('文章题目不能为空!');
+                return;
+            }
             $.ajax({
                 url: '/blog/add_content/',
                 data: JSON.stringify({'title': $('#title').val(), 'content': $('#text_content').val()}),
@@ -23,7 +32,6 @@
                 }
             })
         }
-
     </script>
 {% endblock %}
 {% block title %}新增{% endblock %}
