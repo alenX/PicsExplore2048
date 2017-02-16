@@ -188,5 +188,6 @@ if __name__ == '__main__':
     app.register_blueprint(mib_v)
     app.register_blueprint(blog_v)
     app.register_blueprint(pic_v)
-    app.run(ssl_context=('C:\\OpenSSL-Win64\\wangss-test\\server.crt', 'C:\\OpenSSL-Win64\\wangss-test\\server.key'),
-            threaded=True)
+    # app.run(ssl_context=('C:\\OpenSSL-Win64\\wangss-test\\server.crt', 'C:\\OpenSSL-Win64\\wangss-test\\server.key'),
+    #         threaded=True)
+    app.run(debug=True)
