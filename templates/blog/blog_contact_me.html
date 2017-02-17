@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">
+{% endblock %}
+{% block title %}联系我{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div>
+        <span>Email:genhaoai#mail.com</span>
+    </div>
+{% endblock %}

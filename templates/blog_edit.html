@@ -41,7 +41,7 @@
     {#<div id="preview">
     <img id="lay_pic_id" style="width: 60px;height: 60px;border-radius: 50%;" src="{{ url_for('static',filename='image/default.png') }}"/>
     </div>#}
-    <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog_upload') }}">
+    <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog.blog_upload') }}">
 {#        <input type="file" name="file">#}
         <input type="file" name="file" class="layui-upload-file" lay-title="添加个人头像图片">
 {#        <input type=submit value=上传>#}

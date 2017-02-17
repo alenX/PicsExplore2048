@@ -2,15 +2,47 @@
 <html lang="en">
 {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static',filename='image/fav.ico') }}"/>
-{#    <link rel="stylesheet" href="{{ url_for('static',filename='highlight/style/default.min.css') }}">#}
+    {#    <link rel="stylesheet" href="{{ url_for('static',filename='highlight/style/default.min.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/public.css') }}">
-{#    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">#}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/banner.css') }}">
+    {#    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">#}
     <script src="{{ url_for('static',filename='js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ url_for('static',filename='layui/layui.js') }}"></script>
     <script src="{{ url_for('static',filename='js/marked.min.js') }}"></script>
 
-{#    <script src="{{ url_for('static',filename='highlight/highlight.min.js') }}"></script>#}
+    {#    <script src="{{ url_for('static',filename='highlight/highlight.min.js') }}"></script>#}
     {#    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">#}
+    <script>
+        (function () {
+            var animenuToggle = document.querySelector('.animenu__toggle'),
+                    animenuNav = document.querySelector('.animenu__nav'),
+                    hasClass = function (elem, className) {
+                        return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+                    },
+                    toggleClass = function (elem, className) {
+                        var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, ' ') + ' ';
+                        if (hasClass(elem, className)) {
+                            while (newClass.indexOf(' ' + className + ' ') >= 0) {
+                                newClass = newClass.replace(' ' + className + ' ', ' ');
+                            }
+                            elem.className = newClass.replace(/^\s+|\s+$/g, '');
+                        } else {
+                            elem.className += ' ' + className;
+                        }
+                    },
+                    animenuToggleNav = function () {
+                        toggleClass(animenuToggle, "animenu__toggle--active");
+                        toggleClass(animenuNav, "animenu__nav--open");
+                    };
+
+            {#if (!animenuToggle.addEventListener) {
+                animenuToggle.attachEvent("onclick", animenuToggleNav);
+            }
+            else {
+                animenuToggle.addEventListener('click', animenuToggleNav);
+            }#}
+        })()
+    </script>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
 {% endblock %}
@@ -20,6 +52,48 @@
     </div>
     <div class="title_name"><a href="/blog/list/1" style="font-family: '微软雅黑', serif">Blog</a></div>
     <div class="title_name"><a style="font-size: 15px" style="font-family: '微软雅黑', serif">genhaoai@gmail.com</a>
+    </div>
+    <div class="htmleaf-container" style="padding-left: 10%;padding-right: 10%;padding-top: 20px">
+        <nav class="animenu">
+            <button class="animenu__toggle">
+                <span class="animenu__toggle__bar"></span>
+                <span class="animenu__toggle__bar"></span>
+                <span class="animenu__toggle__bar"></span>
+            </button>
+            <ul class="animenu__nav">
+                <li>
+                    <a href="{{ url_for('blog.blog_list',current=1) }}">首页</a>
+                </li>
+                {#<li>
+                    <a href="#">Archive</a>
+                    <ul class="animenu__nav__child">
+                        <li><a href="">Sub Item 1</a></li>
+                        <li><a href="">Sub Item 2</a></li>
+                        <li><a href="">Sub Item 3</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Categories</a>
+                    <ul class="animenu__nav__child">
+                        <li><a href="">Sub Item 1</a></li>
+                        <li><a href="">Sub Item 2</a></li>
+                        <li><a href="">Sub Item 3</a></li>
+                    </ul>
+                </li>#}
+                {% if current_user.is_authenticated %}
+                    <li>
+                        <a href="{{ url_for('blog.blog_edit') }}">个人信息</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ url_for('blog.blog_login') }}">登陆</a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="{{ url_for('blog.blog_contact_me') }}">联系我！！</a>
+                </li>
+            </ul>
+        </nav>
     </div>
     {% if current_user.is_authenticated %}
         <div class="user_info" style="padding-left: 20px">Hi<a

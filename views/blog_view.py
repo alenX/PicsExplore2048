@@ -199,3 +199,8 @@ def blog_edit_delete():
         return jsonify({'succ': '1'})
     except:
         return jsonify({'succ': '0'})
+
+
+@blog_v.route('/blog/contact_me')
+def blog_contact_me():
+    return render_template('blog/blog_contact_me.html')
