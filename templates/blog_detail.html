@@ -39,4 +39,26 @@
         document.getElementById('content').innerHTML = marked("{{ current_blog.content|safe|i_normal_markdown }}");
         {#                document.getElementById('content').innerHTML = marked(markdownString);#}
     </script>
+    <div>
+        {% for c in comms %}
+            <label>{{ c.comment_username }}说:</label><label>{{ c.comment }}</label><label>{{ c.comment_time }}</label><br>
+        {% endfor %}
+    </div>
+    <div style="padding-left: 20%">
+        <div>
+            {% if image %}
+                <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
+                     src="{{ url_for('static',filename=image,v=time) }}">
+            {% else %}
+                <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
+                     src="{{ url_for('static',filename='image/default.png') }}">
+            {% endif %}
+            <br>
+            <form method="post" action="{{ url_for('blog.blog_comment_add',blog_id=current_blog._id) }}">
+                {{ form.csrf_token }}
+                <label>评论:</label>{{ form.comment }}<br>
+                <input type="submit" value="提交">
+            </form>
+        </div>
+    </div>
 {% endblock %}

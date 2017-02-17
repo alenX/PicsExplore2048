@@ -10,8 +10,9 @@ from bson import ObjectId
 from flask_login import LoginManager, login_required
 from decorator import login_and_admin
 from ext import db as mysql_db
-from models import User
+from models import User, Comment
 from flask_login import login_user, logout_user, current_user
+from blog_form import CommentForm
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -39,10 +40,24 @@ def blog_list(current=1):
 
 @blog_v.route('/blog/detail/<string:blog_id>')
 def blog_detail(blog_id):
+    cf = CommentForm()
     current_blog = blog.find_one({'_id': ObjectId(blog_id)})  # bson
     if current_blog is None:
         return redirect(url_for('blog.blog_list', current=1))
-    return render_template('blog_detail.html', current_blog=current_blog)
+    bs_pic = ''
+    if user_mongo.find_one({'id': current_user.id}):
+        img = user_mongo.find_one({'id': current_user.id})['pic_bs64']
+        if img:
+            if not os.path.isdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id))):
+                os.mkdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id)))
+            with open(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id), 'header_img.jpg'), "wb") as p:
+                p.write(base64.b64decode(img))
+                p.flush()
+            bs_pic = 'image/' + str(current_user.id) + '/' + 'header_img.jpg'
+
+    comms = Comment.query.filter_by(comment_id=blog_id).all()
+    return render_template('blog_detail.html', current_blog=current_blog, image=bs_pic,
+                           time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), form=cf,comms=comms)
 
 
 @blog_v.route('/blog/add')
@@ -96,7 +111,7 @@ def blog_login_register():
     u = User()
     u.pwd = user_para['password']
     u.username = user_para['user']
-    print(User.query.filter_by(username='admin').all())
+    # print(User.query.filter_by(username='admin').all())
     if u.username == 'admin' and User.query.filter_by(username='admin').first():
         return jsonify({'rs': str('false'), 'content': '不能使用admin用户注册'})
     mysql_db.session.add(u)
@@ -204,3 +219,19 @@ def blog_edit_delete():
 @blog_v.route('/blog/contact_me')
 def blog_contact_me():
     return render_template('blog/blog_contact_me.html')
+
+
+@blog_v.route('/blog/comment/add', methods=['post'])
+def blog_comment_add():
+    blog_id = request.args['blog_id']
+    cf = CommentForm()
+    comm = Comment()
+    comm.comment = cf.comment.data
+    comm.comment_userid = current_user.id
+    comm.comment_time = datetime.datetime.now()
+    comm.comment_id = blog_id
+    comm.comment_username = current_user.username
+    mysql_db.session.add(comm)
+    mysql_db.session.commit()
+    # 增加comment
+    return redirect('/blog/detail/' + blog_id)

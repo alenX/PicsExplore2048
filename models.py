@@ -2,7 +2,6 @@
 from flask_login import UserMixin
 from ext import db as mysql_db
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.dialects.mysql import MEDIUMTEXT
 
 
 class User(UserMixin, mysql_db.Model):
@@ -10,8 +9,8 @@ class User(UserMixin, mysql_db.Model):
     id = mysql_db.Column(mysql_db.Integer, primary_key=True)
     username = mysql_db.Column(mysql_db.String(64), unique=True, index=True)
     password = mysql_db.Column(mysql_db.String(256))
-    login_count = mysql_db.Column(mysql_db.Integer,default=0)
-    last_login_ip = mysql_db.Column(mysql_db.String(32),default='unknown')
+    login_count = mysql_db.Column(mysql_db.Integer, default=0)
+    last_login_ip = mysql_db.Column(mysql_db.String(32), default='unknown')
     pic = mysql_db.Column(mysql_db.LargeBinary())
     nickname = mysql_db.Column(mysql_db.String(64))
 
@@ -38,3 +37,13 @@ class User(UserMixin, mysql_db.Model):
 
     def get_id(self):
         return str(self.id)
+
+
+class Comment(mysql_db.Model):
+    __tablename__ = 'blog_comment'
+    id = mysql_db.Column(mysql_db.Integer, primary_key=True)
+    comment_id = mysql_db.Column(mysql_db.String(256))  # 评论的blog id
+    comment_userid = mysql_db.Column(mysql_db.Integer)
+    comment_username = mysql_db.Column(mysql_db.String(256))
+    comment_time = mysql_db.Column(mysql_db.Time)
+    comment = mysql_db.Column(mysql_db.String(256), default='Good 很棒')
