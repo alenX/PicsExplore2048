@@ -4,7 +4,7 @@ import datetime
 import os
 import base64
 import flask_login
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, Flask, json, send_from_directory
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, Flask, json
 from werkzeug.utils import secure_filename
 from bson import ObjectId
 from flask_login import LoginManager, login_required
@@ -45,7 +45,7 @@ def blog_detail(blog_id):
     if current_blog is None:
         return redirect(url_for('blog.blog_list', current=1))
     bs_pic = ''
-    if user_mongo.find_one({'id': current_user.id}):
+    if current_user.is_authenticated and user_mongo.find_one({'id': current_user.id}):
         img = user_mongo.find_one({'id': current_user.id})['pic_bs64']
         if img:
             if not os.path.isdir(os.path.join(app.config['HEADER_PIC_FOLDER'], str(current_user.id))):

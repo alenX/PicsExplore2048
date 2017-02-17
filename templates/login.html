@@ -156,6 +156,9 @@
                 }
 
                 $('#login').click(function () {
+                    var index = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
                     var user = $('#usn').val();
                     var password = base64encode($('#pwd').val());
                     $.ajax({
@@ -163,8 +166,9 @@
                         data: JSON.stringify({'user': user, 'password': password}),
                         type: 'POST',
                         success: function (resp) {
+                            layer.close(index)
                             if (resp.rs == 'true') {
-                                window.location.href = '/blog/add';
+                                window.location.href = '/blog/list/1';
                             } else {
                                 window.location.href = '/blog/login';
                             }
@@ -173,6 +177,9 @@
                 });
 
                 $('#register').click(function () {
+                    var index = layer.load(1, {
+                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                    });
                     var user = $('#usn').val();
                     var password = base64encode($('#pwd').val());
                     $.ajax({
@@ -180,12 +187,13 @@
                         data: JSON.stringify({'user': user, 'password': password}),
                         type: 'POST',
                         success: function (resp) {
+                            layer.close(index)
                             if (resp.rs == 'true') {
                                 window.location.href = '/blog/list/1';
                             } else {
                                 layer.msg(resp.content);
                                 return;
-{#                                window.location.href = '/blog/login';#}
+                                {#                                window.location.href = '/blog/login';#}
                             }
                         }
                     })
@@ -214,7 +222,9 @@
                     <button id="login" class="layui-btn layui-btn-radius layui-btn-normal">登陆</button>
                 </a>
                 <a style="padding-left: 40px">
-                    <button id="register" class="layui-btn layui-btn-radius layui-btn-primary" style="color: white;background-color: green">注册</button>
+                    <button id="register" class="layui-btn layui-btn-radius layui-btn-primary"
+                            style="color: white;background-color: green">注册
+                    </button>
                 </a>
             </div>
         </div>

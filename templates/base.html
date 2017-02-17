@@ -64,6 +64,14 @@
                 <li>
                     <a href="{{ url_for('blog.blog_list',current=1) }}">首页</a>
                 </li>
+                {% if current_user.is_authenticated and current_user.is_admin() %}
+                    <li>
+                        <a href="{{ url_for('blog.blog_add') }}">新增文章</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('blog.blog_add_markdown') }}">上传Markdown</a>
+                    </li>
+                {% endif %}
                 {#<li>
                     <a href="#">Archive</a>
                     <ul class="animenu__nav__child">
@@ -97,7 +105,9 @@
     </div>
     {% if current_user.is_authenticated %}
         <div class="user_info" style="padding-left: 20px">Hi<a id="base_user_name"
-                style="padding-right: 15px;color: #3b4249;font-size: 26px"> {% if current_user.nickname!=None %} {{ current_user.nickname }}{% else %}{{ current_user.username }}{% endif %}</a><a
+                                                               style="padding-right: 15px;color: #3b4249;font-size: 26px">
+            {% if current_user.nickname!=None %} {{ current_user.nickname }}{% else %}
+                {{ current_user.username }}{% endif %}</a><a
                 style="color:#1b6d85" href="/blog/logout">注销</a></div>
     {% endif %}
 {% endblock %}

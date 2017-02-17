@@ -38,6 +38,9 @@ class User(UserMixin, mysql_db.Model):
     def get_id(self):
         return str(self.id)
 
+    def is_admin(self):
+        return self.username == 'admin'
+
 
 class Comment(mysql_db.Model):
     __tablename__ = 'blog_comment'
