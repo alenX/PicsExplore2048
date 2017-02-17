@@ -22,13 +22,13 @@ div.submit{
     padding-top: 20px;
 }
 
-button.btn{
-    width: 66px;
-    height: 30px;
-    border-radius: 6px;
-    border: #8a8a8a 1px solid;
-    color: burlywood;
-}
+/*button.btn{*/
+    /*width: 66px;*/
+    /*height: 30px;*/
+    /*border-radius: 6px;*/
+    /*border: #8a8a8a 1px solid;*/
+    /*color: burlywood;*/
+/*}*/
 
 span.input_span{
     text-align: left;
