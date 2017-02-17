@@ -4,32 +4,53 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">
     <script type="application/javascript">
-        layui.use('upload', function () {
+        layui.use(['upload', 'layer'], function () {
             layui.upload({
                 url: '/blog/upload' //上传接口
-                ,method:'post'
+                , method: 'post'
                 , success: function (res) { //上传成功后的回调
-                    $('#lay_pic_id').attr('src','{{ url_for('static',filename='cache/') }}'+res.url);
-                    $('#header').attr('src','{{ url_for('static',filename='cache/') }}'+res.url);
+                    $('#lay_pic_id').attr('src', '{{ url_for('static',filename='cache/') }}' + res.url);
+                    $('#header').attr('src', '{{ url_for('static',filename='cache/') }}' + res.url);
 
                 }
             });
+            var layer = layui.layer;
 
-           {# layui.upload({
-                url: '/test/upload.json'
-                , elem: '#test' //指定原始元素，默认直接查找class="layui-upload-file"
-                , method: 'get' //上传接口的http类型
-                , success: function (res) {
-                    LAY_demo_upload.src = res.url;
-                }
-            });#}
+            {# layui.upload({
+                 url: '/test/upload.json'
+                 , elem: '#test' //指定原始元素，默认直接查找class="layui-upload-file"
+                 , method: 'get' //上传接口的http类型
+                 , success: function (res) {
+                     LAY_demo_upload.src = res.url;
+                 }
+             });#}
+
+            $(document).ready(function () {
+                $('#edit_profile').on('click', function () {
+                    var nickname = $('#nickname').val();
+                    $.ajax({
+                        url: '/blog/edit/change_info',
+                        data:JSON.stringify({'nickname': nickname}),
+                        method: 'post',
+                        success: function (rs) {
+                            if(rs.succ==1){
+                                layer.msg('修改成功!');
+                                $('#base_user_name').text(nickname)
+                            }
+
+                        }
+                    })
+                })
+            });
         });
     </script>
 {% endblock %}
 {% block title %}个人信息维护{% endblock %}
 {% block body %}
     {{ super() }}
+    <div style="padding-left: 10%;padding-right: 20%">
     <div>
+    <label>个人头像:</label><br>
         {% if image %}
             <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
                  src="{{ url_for('static',filename=image,v=time) }}">
@@ -42,8 +63,13 @@
     <img id="lay_pic_id" style="width: 60px;height: 60px;border-radius: 50%;" src="{{ url_for('static',filename='image/default.png') }}"/>
     </div>#}
     <form id="file" enctype=multipart/form-data method="post" action="{{ url_for('blog.blog_upload') }}">
-{#        <input type="file" name="file">#}
-        <input type="file" name="file" class="layui-upload-file" lay-title="添加个人头像图片">
-{#        <input type=submit value=上传>#}
+        {#        <input type="file" name="file">#}
+        <input type="file" name="file" class="layui-upload-file" lay-title="修改个人头像">
+        {#        <input type=submit value=上传>#}
     </form>
+    <label>昵称:</label>
+    <input class="layui-input " style="width: 30%;" title="nickname" id="nickname"
+           {% if current_user.nickname!=None %}value="{{ current_user.nickname }}"{% endif %}><br>
+    <button class="layui-btn" id="edit_profile">修改</button>
+</div>
 {% endblock %}

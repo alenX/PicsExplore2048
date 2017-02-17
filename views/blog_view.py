@@ -57,7 +57,7 @@ def blog_detail(blog_id):
 
     comms = Comment.query.filter_by(comment_id=blog_id).all()
     return render_template('blog_detail.html', current_blog=current_blog, image=bs_pic,
-                           time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), form=cf,comms=comms)
+                           time=datetime.datetime.now().strftime('%Y%m%d%H%M%S'), form=cf, comms=comms)
 
 
 @blog_v.route('/blog/add')
@@ -230,8 +230,21 @@ def blog_comment_add():
     comm.comment_userid = current_user.id
     comm.comment_time = datetime.datetime.now()
     comm.comment_id = blog_id
-    comm.comment_username = current_user.username
+    if current_user.nickname is not None:
+        comm.comment_username = current_user.nickname
+    else:
+        comm.comment_username = current_user.username
     mysql_db.session.add(comm)
     mysql_db.session.commit()
     # 增加comment
     return redirect('/blog/detail/' + blog_id)
+
+
+@blog_v.route('/blog/edit/change_info', methods=['post'])
+def blog_edit_change_edit():
+    nickname = json.loads(request.get_data())['nickname']
+    u = User.query.filter_by(id=current_user.id).first()
+    u.nickname = nickname
+    mysql_db.session.add(u)
+    mysql_db.session.commit()
+    return jsonify({'succ': 1, 'nickname': nickname})

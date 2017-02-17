@@ -2,6 +2,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('static',filename='layui/css/layui.css') }}">#}
     <link rel="stylesheet" href="{{ url_for('static',filename='highlight/style/monokai_sublime.min.css') }}">
     <script src="{{ url_for('static',filename='highlight/highlight.min.js') }}"></script>
     <script>hljs.initHighlightingOnLoad();</script>
@@ -53,11 +54,10 @@
                 <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
                      src="{{ url_for('static',filename='image/default.png') }}">
             {% endif %}
-            <br>
             <form method="post" action="{{ url_for('blog.blog_comment_add',blog_id=current_blog._id) }}">
                 {{ form.csrf_token }}
                 <label>评论:</label>{{ form.comment }}<br>
-                <input type="submit" value="提交">
+                <input type="submit" value="提交" class="layui-input">
             </form>
         </div>
     </div>
