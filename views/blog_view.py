@@ -248,3 +248,14 @@ def blog_edit_change_edit():
     mysql_db.session.add(u)
     mysql_db.session.commit()
     return jsonify({'succ': 1, 'nickname': nickname})
+
+
+@blog_v.route('/blog/vue/test')
+def vue_test():
+    return render_template('tools/test.html')
+
+
+@blog_v.route('/blog/vue/check_name', methods=['POST'])
+def vue_check_name():
+    name = json.loads(request.get_data())['name']
+    return jsonify({'succ': 'false'})

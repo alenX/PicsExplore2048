@@ -179,7 +179,7 @@
                 $('#register').click(function () {
                     var user = $('#usn').val();
                     var pwd = $('#pwd').val();
-                    if(user==''||pwd==''){
+                    if (user == '' || pwd == '') {
                         layer.msg('不能为空!');
                         return;
                     }
@@ -203,6 +203,23 @@
                         }
                     })
                 });
+
+                var login_vue = new Vue({
+                    el: '#registerddd',
+                    methods: {
+                        regname: function () {
+                            var usn = $('#usn').val();
+                            $.ajax({
+                                url:'/blog/vue/check_name',
+                                method:'POST',
+                                data:JSON.stringify({name:usn}),
+                                success:function (rs) {
+                                    alert(rs.succ)
+                                }
+                            });
+                        }
+                    }
+                });
             });
         });
     </script>
@@ -214,7 +231,7 @@
         <div class="input_div">
             <div class="user">
                 <span class="input_span">用户名:</span>
-                <a style="width:100px"><input type="text" title="用户名" id="usn"></a>
+                <a style="width:100px"><input type="text" title="用户名" id="usn" ></a>
             </div>
             <div class="user" style="padding-top: 20px">
                 <span class="input_span">密码:</span>
@@ -229,6 +246,9 @@
                 <a style="padding-left: 40px">
                     <button id="register" class="layui-btn  layui-btn-primary"
                             style="color: white;background-color: green">注册
+                    </button>
+                    <button id="registerddd" class="layui-btn  layui-btn-primary"
+                            style="color: white;background-color: green" v-on:click="regname">注册aaa
                     </button>
                 </a>
             </div>
