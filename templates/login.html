@@ -156,10 +156,15 @@
                 }
 
                 $('#login').click(function () {
+                    var user = $('#usn').val();
+                    if(user.trim()==''){
+                        layer.msg('用户名不能为空!');
+                        return;
+                    }
                     var index = layer.load(1, {
                         shade: [0.1, '#fff'] //0.1透明度的白色背景
                     });
-                    var user = $('#usn').val();
+
                     var password = base64encode($('#pwd').val());
                     $.ajax({
                         url: '/blog/login/reg',
@@ -247,9 +252,9 @@
                     <button id="register" class="layui-btn  layui-btn-primary"
                             style="color: white;background-color: green">注册
                     </button>
-                    <button id="registerddd" class="layui-btn  layui-btn-primary"
+                    {#<button id="registerddd" class="layui-btn  layui-btn-primary"
                             style="color: white;background-color: green" v-on:click="regname">注册aaa
-                    </button>
+                    </button>#}
                 </a>
             </div>
         </div>

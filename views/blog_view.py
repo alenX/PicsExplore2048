@@ -228,7 +228,7 @@ def blog_comment_add():
     comm = Comment()
     comm.comment = cf.comment.data
     comm.comment_userid = current_user.id
-    comm.comment_time = datetime.datetime.now()
+    comm.comment_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     comm.comment_id = blog_id
     if current_user.nickname is not None:
         comm.comment_username = current_user.nickname

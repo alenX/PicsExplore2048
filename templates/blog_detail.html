@@ -40,29 +40,36 @@
         document.getElementById('content').innerHTML = marked("{{ current_blog.content|safe|i_normal_markdown }}");
         {#                document.getElementById('content').innerHTML = marked(markdownString);#}
     </script>
-    <div style="padding-left: 20%">
-        {% for c in comms %}
-            <label>{{ c.comment_username }}说:</label><label>{{ c.comment }}</label><label>{{ c.comment_time }}</label>
-            <br>
-        {% endfor %}
-    </div>
 
-    {% if current_user.is_authenticated %}
-        <div style="padding-left: 20%">
-            <div>
-                {% if image %}
-                    <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
-                         src="{{ url_for('static',filename=image,v=time) }}">
-                {% else %}
-                    <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
-                         src="{{ url_for('static',filename='image/default.png') }}">
-                {% endif %}
-                <form method="post" action="{{ url_for('blog.blog_comment_add',blog_id=current_blog._id) }}">
-                    {{ form.csrf_token }}
-                    <label>评论:</label>{{ form.comment }}<br>
-                    <input type="submit" value="提交" class="layui-input">
-                </form>
+    <div style="padding-left: 20%;font-size: large">评论列表:</div>
+    <div style="padding-left: 20%;padding-top: 16px;">
+        {% for c in comms %}
+            <div id="comment">
+            <a style="font-size: medium;font-family: '微软雅黑', serif;color: #1b6d85">{{ c.comment_username }}:</a>
+            <a style="padding-left: 20px;">{{ c.comment_time }}</a>
+            <div style="padding-top: 10px;padding-bottom: 10px;">
+                {{ c.comment }}
             </div>
+        {% endfor %}
         </div>
-    {% endif %}
+
+        {% if current_user.is_authenticated %}
+            <div style="padding-left: 60%">
+                <div>
+                    {% if image %}
+                        <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
+                             src="{{ url_for('static',filename=image,v=time) }}">
+                    {% else %}
+                        <img id="header" style="width: 60px;height: 60px;border-radius: 50%;"
+                             src="{{ url_for('static',filename='image/default.png') }}">
+                    {% endif %}
+                    <form method="post" action="{{ url_for('blog.blog_comment_add',blog_id=current_blog._id) }}">
+                        {{ form.csrf_token }}
+                        <label>评论:</label>{{ form.comment }}<br>
+                        <input type="submit" value="提交" class="layui-input">
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

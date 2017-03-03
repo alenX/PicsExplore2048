@@ -48,5 +48,5 @@ class Comment(mysql_db.Model):
     comment_id = mysql_db.Column(mysql_db.String(256))  # 评论的blog id
     comment_userid = mysql_db.Column(mysql_db.Integer)
     comment_username = mysql_db.Column(mysql_db.String(256))
-    comment_time = mysql_db.Column(mysql_db.Time)
+    comment_time = mysql_db.Column(mysql_db.DateTime)
     comment = mysql_db.Column(mysql_db.String(256), default='Good 很棒')
