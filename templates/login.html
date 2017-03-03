@@ -175,7 +175,11 @@
                             if (resp.rs == 'true') {
                                 window.location.href = '/blog/list/1';
                             } else {
-                                window.location.href = '/blog/login';
+                                layer.msg('用户名或密码错误,登陆失败!');
+                                $('#usn').val('');
+                                $('#pwd').val('');
+                                $('#usn').focus();
+{#                                window.location.href = '/blog/login';#}
                             }
                         }
                     })
