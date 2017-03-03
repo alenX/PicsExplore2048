@@ -45,14 +45,13 @@
     <div style="padding-left: 20%;padding-top: 16px;">
         {% for c in comms %}
             <div id="comment">
-            <a style="font-size: medium;font-family: '微软雅黑', serif;color: #1b6d85">{{ c.comment_username }}:</a>
-            <a style="padding-left: 20px;">{{ c.comment_time }}</a>
-            <div style="padding-top: 10px;padding-bottom: 10px;">
-                {{ c.comment }}
+                <a style="font-size: medium;font-family: '微软雅黑', serif;color: #1b6d85">{{ c.comment_username }}:</a>
+                <a style="padding-left: 20px;">{{ c.comment_time }}</a>
+                <div style="padding-top: 10px;padding-bottom: 10px;">
+                    {{ c.comment }}
+                </div>
             </div>
         {% endfor %}
-        </div>
-
         {% if current_user.is_authenticated %}
             <div style="padding-left: 60%">
                 <div>
