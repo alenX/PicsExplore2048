@@ -231,20 +231,13 @@
 }
 
 .copyright {
-    background: #111;
-    font-size: 13px;
-    text-align: center;
-    color: #555555;
-    /*padding-top: 28px;*/
-    /*padding-bottom: 28px;*/
-    /*position: fixed;*/
-    height: 20px;
+    text-shadow: 0 0 1px #e0e0e0;
+    position: absolute;
+    width: 100%;
     bottom: 0;
-    position: fixed;
-    margin: 0 auto;
-    left: 0;
-    right: 0;
-    /*border-top: 1px solid #303030;*/
+    padding: 20px;
+    text-align: center;
+    color: #bdbdbd;
 }
 
 .copyright span {
